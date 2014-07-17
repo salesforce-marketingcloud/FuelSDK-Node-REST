@@ -14,31 +14,33 @@ describe( 'HTTP methods', function() {
 
 	before( function() {
 		server = mockServer( port );
-		sinon.stub( FuelAuth.prototype, 'getAccessToken', function( requestOpts, force, callback ) {
-			FuelAuth.prototype._deliverResponse( 'response', { accessToken: 'tokenForRest', expiresIn: 3600 }, callback );
-		});
 	});
 
 	after(function() {
 		server.close();
-		FuelAuth.prototype.getAccessToken.restore();
 	});
 
-	it( 'should deliver a get response', function(done) {
-		var getSpy = sinon.spy( FuelRest.prototype, 'get' );
+	describe( 'GET', function() {
+		it( 'should deliver a get response', function(done) {
+			// setting up spy and rest client
+			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
+			var RestClient    = new FuelRest({
+				clientId: 'testing'
+				, clientSecret: 'testing'
+			}, localhost );
 
-		var RestClient = new FuelRest({
-			clientId: 'testing'
-			, clientSecret: 'testing'
-		}, localhost );
+			// faking auth
+			RestClient.AuthClient.accessToken = 'testForRest';
+			RestClient.AuthClient.expiration  = 111111111111;
 
-		RestClient.get( '/get/test', null, function( response ) {
-			expect( getSpy.calledOnce ).to.be.true;
+			RestClient.get( '/get/test', null, function( err, response ) {
+				// need to make sure we called apiRequest method
+				expect( apiRequestSpy.calledOnce ).to.be.true;
+				expect( response.apiResponse.req.method ).to.equal( 'GET' );
 
-			FuelRest.prototype.get.restore();
-
-			done();
+				FuelRest.prototype.apiRequest.restore(); // restoring function
+				done();
+			});
 		});
 	});
-
 });
