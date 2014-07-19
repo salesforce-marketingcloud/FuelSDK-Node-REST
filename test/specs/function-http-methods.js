@@ -2,10 +2,8 @@ var expect          = require( 'chai' ).expect;
 var sinon           = require( 'sinon' );
 var mockServer      = require( '../mock-server' );
 var FuelRest        = require( '../../lib/fuel-rest' );
-var FuelAuth        = require( 'fuel-auth' );
 var port            = 4550;
 var localhost       = 'http://127.0.0.1:' + port;
-var sampleResponses = require( '../sample-responses' );
 
 describe( 'HTTP methods', function() {
 	'use strict';
@@ -33,14 +31,52 @@ describe( 'HTTP methods', function() {
 			RestClient.AuthClient.accessToken = 'testForRest';
 			RestClient.AuthClient.expiration  = 111111111111;
 
-			RestClient.get( '/get/test', null, function( err, response ) {
+			RestClient.get( '/get/test', null, function( err, data ) {
 				// need to make sure we called apiRequest method
 				expect( apiRequestSpy.calledOnce ).to.be.true;
-				expect( response.apiResponse.req.method ).to.equal( 'GET' );
+
+				// making sure original request was GET
+				expect( data.apiResponse.req.method ).to.equal( 'GET' );
 
 				FuelRest.prototype.apiRequest.restore(); // restoring function
 				done();
 			});
+		});
+	});
+
+	describe( 'POST', function() {
+		it( 'should deliver a POST', function( done ) {
+			// request spy
+			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
+
+			// post data, will only return response if this is correct
+			var postData = {
+				testingData: 'test data'
+			};
+
+			// rest client setup
+			var RestClient = new FuelRest({
+				clientId: 'testing'
+				, clientSecret: 'testing'
+			}, localhost );
+
+			// faking auth
+			RestClient.AuthClient.accessToken = 'testForRest';
+			RestClient.AuthClient.expiration  = 111111111111;
+
+			// doing post
+			RestClient.post( '/post/test', postData, null, function( err, data ) {
+				// need to make sure we called apiRequest method
+				expect( apiRequestSpy.calledOnce ).to.be.true;
+
+				// making sure original request was POST
+				expect( data.apiResponse.req.method ).to.equal( 'POST' );
+
+
+				FuelRest.prototype.apiRequest.restore(); // restoring function
+				done();
+			});
+
 		});
 	});
 });

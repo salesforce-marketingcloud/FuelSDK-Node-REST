@@ -4,10 +4,8 @@ module.exports = {
 			test: '/test/test/test'
 		}
 	},
-	401: {
-		documentation: "",
-		errorcode: 1,
-		message: "Unauthorized"
+	post200: {
+		id: 1
 	},
 	404: {
 		documentation: "https://code.docs.exacttarget.com/rest/errors/404",

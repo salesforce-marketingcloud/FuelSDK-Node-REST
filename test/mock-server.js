@@ -37,6 +37,12 @@ module.exports = function(port) {
 				return;
 			}
 
+			if( req.url === validUrls[ 1 ] && req.body.testingData === 'test data' ) {
+				res.statusCode = 200;
+				res.end( JSON.stringify( sampleResponses.post200 ) );
+				return;
+			}
+
 			// // successful response (200)
 			// if (req.body.clientId === 'test' && req.body.clientSecret === 'test') {
 			// 	res.statusCode = 200;
