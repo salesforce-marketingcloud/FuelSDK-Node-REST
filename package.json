@@ -4,7 +4,7 @@
   "description": "Node Library for performing REST API calls with ExactTarget Fuel.",
   "main": "./lib/fuel-rest.js",
   "scripts": {
-    "test": "grunt jshint && mocha --reporter=spec test/spec"
+    "test": "grunt jshint && ./node_modules/mocha/bin/mocha --reporter=spec test/specs/*.js"
   },
   "repository": {
     "type": "git",
