@@ -91,7 +91,6 @@ var RestClient = new FuelRest({
 ### Using Events
 
 ```js
-
 RestClient.once( 'response', function( response ) {
 	// will be delivered with 200, 400, 401, 500, etc status codes
 	// response.body === payload from response
@@ -116,7 +115,6 @@ RestClient.get( '/platform/v1/endpoints', options );
 
 ### Using Callbacks
 ```js
-
 RestClient.get( '/platform/v1/endpoints', options, function( err, response ) {
 	if( err ) {
 		// error here
