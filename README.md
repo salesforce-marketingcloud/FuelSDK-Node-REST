@@ -5,15 +5,15 @@ This library allows users access to ExactTarget's REST API at a low level.
 
 ## API
 
-Initializing - **new FuelRest( authOptions, restEndpoint )**
+**new FuelRest( authOptions, restEndpoint )** - Initialization
 
-* authOptions
+* *authOptions*
     * required: yes
     * type: `Object`
     * properties need to match [FuelAuth Initialization][1]
-* restEndpoint
+* *restEndpoint*
     * required: no
-    * type: 'String'
+    * type: `String`
     * default: https://www.exacttargetapis.com
 
 ### HTTP Methods
@@ -22,28 +22,29 @@ Initializing - **new FuelRest( authOptions, restEndpoint )**
 
 See next section for shared parameters
 
-1. **get( uri, options, callback )**
-2. **post( uri, data, options, callback )**
-3. **put( uri, data, options, callback )**
-4. **delete( uri, data, options, callback )**
-5. **apiRequest( type, uri, options, callback )** -- used by get, post, put, delete
-    * type
+* **get( uri, options, callback )**
+* **post( uri, data, options, callback )**
+* **put( uri, data, options, callback )**
+* **delete( uri, data, options, callback )**
+* **apiRequest( type, uri, options, callback )** -- used by get, post, put, delete
+    * *type*
         * required: yes
         * type: `String`
         * http method of request
 
 #### Shared Parameters
 
-**Shared by all methods**
-* uri
+***Shared by all methods***
+
+* *uri*
     * required: yes
     * type: `String`
     * will merge to the restEndpoint provided using [url.resolve][2]
-* options
+* *options*
     * required: no
     * type: `Object`
     * when using callback `null` will need to be passed if not needed
-    * properties
+    * *properties*
         * requestOptions
             *  type: `Object`
             * options passed during call to REST API. See [request modules options][3]
@@ -52,14 +53,19 @@ See next section for shared parameters
             * options passed when [Fuel Auth requests token][4]. See [request modules options][3]
                 * requestOptions - not required
                 * forceRequest - not required
-* callback
+* *callback( error, data )*
     * required: no
     * type: `Function`
     * function that will be executed after request completes
+    * *parameters*
+        * error - error encountered. `null` if no error
+        * data - object with data and response
+            * res ( data.res ) - full response from API call
+            * body ( data.body ) - parsed payload from API call
 
-**Shared by post, put, delete**
+***Shared by post, put, delete***
 
-* data
+* *data*
     * required: no
     * type: `Object`
     * is data the will be posted to REST API
