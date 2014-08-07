@@ -98,15 +98,15 @@ var RestClient = new FuelRest({
 
 ```js
 RestClient.once( 'response', function( response ) {
-	// will be delivered with 200, 400, 401, 500, etc status codes
-	// response.body === payload from response
-	// response.res === full response from request client
-	console.log( response );
+    // will be delivered with 200, 400, 401, 500, etc status codes
+    // response.body === payload from response
+    // response.res === full response from request client
+    console.log( response );
 });
 
 RestClient.once( 'error', function( error ) {
-	// error here
-	console.log( error );
+    // error here
+    console.log( error );
 })
 
 RestClient.get( '/platform/v1/endpoints', options );
@@ -122,22 +122,24 @@ RestClient.get( '/platform/v1/endpoints', options );
 ### Using Callbacks
 ```js
 RestClient.get( '/platform/v1/endpoints', options, function( err, response ) {
-	if( err ) {
-		// error here
-		console.log( error );
-	}
+    if( err ) {
+        // error here
+        console.log( error );
+    }
 
-	// will be delivered with 200, 400, 401, 500, etc status codes
-	// response.body === payload from response
-	// response.res === full response from request client
-	console.log( response );
+    // will be delivered with 200, 400, 401, 500, etc status codes
+    // response.body === payload from response
+    // response.res === full response from request client
+    console.log( response );
 });
 ```
 
 
 ## ChangeLog
 
-Waiting until first release
+* **0.1.0** - 2014-08-07
+    * initial module
+    * initial unit tests
 
 [1]: https://github.com/ExactTarget/Fuel-Node-Auth#api
 [2]: http://nodejs.org/api/url.html#url_url_resolve_from_to
