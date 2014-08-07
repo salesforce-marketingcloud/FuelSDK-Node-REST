@@ -94,32 +94,6 @@ var RestClient = new FuelRest({
 
 ## Examples
 
-### Using Events
-
-```js
-RestClient.once( 'response', function( response ) {
-    // will be delivered with 200, 400, 401, 500, etc status codes
-    // response.body === payload from response
-    // response.res === full response from request client
-    console.log( response );
-});
-
-RestClient.once( 'error', function( error ) {
-    // error here
-    console.log( error );
-})
-
-RestClient.get( '/platform/v1/endpoints', options );
-```
-
-#### Events Emitted
-
-| Event | Fired When... | Data Returned |
-| ----- | ------------- | ---- |
-| response | a request was successfully made to the API and a payload was returned (200, 400, 401, 500) | payload from API (200, 400, 401, 500) |
-| error | an error occured in any part of the module | `Error Object`. Error object will have property `errorPropagatedFrom` letting you know where the error originated from (hopefully easier debugging) |
-
-### Using Callbacks
 ```js
 RestClient.get( '/platform/v1/endpoints', options, function( err, response ) {
     if( err ) {
