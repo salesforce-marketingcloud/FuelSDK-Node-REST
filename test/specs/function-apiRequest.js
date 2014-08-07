@@ -120,12 +120,12 @@ describe( 'apiRequest method', function() {
 
 	it( 'should return an error when no accessToken is available', function( done ) {
 		// stubbing response from auth client with no access token
-		sinon.stub( FuelAuth.prototype, 'getAccessToken', function( requestOptions, force, callback ) {
-			this._deliverResponse( 'response', {
+		sinon.stub( FuelAuth.prototype, 'getAccessToken', function( options, callback ) {
+			callback( null, {
 				documentation: "https://code.docs.exacttarget.com/rest/errors/404"
 				, errorcode: 404
 				, message: "Not Found"
-			}, callback );
+			});
 		});
 
 		// creating local rest client so we can use stubbed auth function
@@ -153,7 +153,8 @@ describe( 'apiRequest method', function() {
 	it( 'should handle an error from the Auth Client', function( done ) {
 		// stubbing response from auth client with no access token
 		sinon.stub( FuelAuth.prototype, '_requestToken', function( requestOptions, callback ) {
-			this._deliverResponse( 'error', new Error( 'error from auth client' ), callback );
+			callback( new Error( 'error from auth client' ), null );
+			return;
 		});
 
 		// creating local rest client so we can use stubbed auth function
@@ -192,7 +193,8 @@ describe( 'apiRequest method', function() {
 	it( 'should use event emitter for error when no callback passed', function( done ) {
 		// stubbing response from auth client with no access token
 		sinon.stub( FuelAuth.prototype, '_requestToken', function( requestOptions, callback ) {
-			this._deliverResponse( 'error', new Error( 'error from auth client' ), callback );
+			callback( new Error( 'error from auth client' ), null );
+			return;
 		});
 
 		// creating local rest client so we can use stubbed auth function
