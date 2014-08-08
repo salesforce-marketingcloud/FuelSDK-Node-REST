@@ -177,45 +177,4 @@ describe( 'apiRequest method', function() {
 			done();
 		});
 	});
-
-	it( 'should use event emitter for response when no callback passed', function( done ) {
-		RestClient.on( 'response', function( data ) {
-			// making sure original request was GET
-			expect( data.res.req.method ).to.equal( 'GET' );
-
-			// finish async test
-			done();
-		});
-
-		RestClient.apiRequest( 'get', '/get/test', null );
-	});
-
-	it( 'should use event emitter for error when no callback passed', function( done ) {
-		// stubbing response from auth client with no access token
-		sinon.stub( FuelAuth.prototype, '_requestToken', function( requestOptions, callback ) {
-			callback( new Error( 'error from auth client' ), null );
-			return;
-		});
-
-		// creating local rest client so we can use stubbed auth function
-		var RestClient = new FuelRest({
-			clientId: 'testing'
-			, clientSecret: 'testing'
-		}, localhost );
-
-		RestClient.on( 'error', function( err ) {
-			// error should be passed, and data should be null
-			expect( !!err ).to.be.true;
-			expect( err.errorPropagatedFrom ).to.equal( 'FuelAuth' );
-			expect( err.message ).to.equal( 'error from auth client' );
-
-			// restoring stubbed function
-			FuelAuth.prototype._requestToken.restore();
-
-			// finish async test
-			done();
-		});
-
-		RestClient.apiRequest( 'get', '/get/test', null );
-	});
 });

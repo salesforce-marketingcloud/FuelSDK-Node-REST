@@ -42,10 +42,6 @@ describe( 'General Tests', function() {
 		expect( RestClient.requestOptions.uri ).to.equal( 'https://www.exacttarget.com' );
 	});
 
-	it( 'should have event emitter prototype', function() {
-		expect( FuelRest.super_.name ).to.equal( 'EventEmitter' );
-	});
-
 	it( 'should have apiRequest on prototype', function() {
 		expect( FuelRest.prototype.apiRequest ).to.be.a( 'function' );
 	});
