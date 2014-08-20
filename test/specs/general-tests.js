@@ -36,10 +36,13 @@ describe( 'General Tests', function() {
 	});
 
 	it( 'should require auth options', function() {
-		var RestClient = new FuelRest();
+		var RestClient;
 
-		// if no options are passed, there will be no auth client
-		expect( RestClient.AuthClient ).to.be.undefined;
+		try {
+			RestClient = new FuelRest();
+		} catch( err ) {
+			expect( err.message ).to.equal( 'options are required. see readme.' );
+		}
 
 		RestClient = new FuelRest({
 			clientId: 'testing'
@@ -48,6 +51,21 @@ describe( 'General Tests', function() {
 
 		// rest client should have an instance of an auth client
 		expect( RestClient.AuthClient instanceof FuelAuth ).to.be.true;
+	});
+
+	it( 'should use already initialized fuel auth client', function() {
+		var AuthClient, RestClient;
+
+		AuthClient = new FuelAuth({
+			clientId: 'testing'
+			, clientSecret: 'testing'
+		});
+
+		AuthClient.test = true;
+
+		RestClient = new FuelRest( AuthClient );
+
+		expect( RestClient.AuthClient.test ).to.be.true;
 	});
 
 	it( 'should take a custom rest endpoint', function() {
