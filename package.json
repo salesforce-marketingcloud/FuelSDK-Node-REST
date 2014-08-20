@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git@github.com:ExactTarget/Fuel-Node-REST.git"
   },
-  "author": "",
-  "license": "MIT",
+  "author": "Alex Vernacchia <avernacchia@exacttarget.com> (http://babble.byvernacchia.com)",
+  "license" : "BSD-3-Clause",
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-bump": "~0.0.14",
