@@ -3,7 +3,7 @@ Fuel REST Client (for Node.js)
 
 This library allows users access to ExactTarget's REST API at a low level.
 
-## API
+## Initialization
 
 **new FuelRest( options )** - Initialization
 
@@ -16,86 +16,45 @@ This library allows users access to ExactTarget's REST API at a low level.
     * Type: `String`
     * Default: https://www.exacttargetapis.com
 
-### HTTP Methods
+## API
 
-#### Methods
-
-See next section for shared parameters
-
-* **get( uri, options, callback )**
-* **post( uri, data, options, callback )**
-* **put( uri, data, options, callback )**
-* **delete( uri, data, options, callback )**
-* **apiRequest( type, uri, options, callback )** -- used by get, post, put, delete
-    * *type*
-        * required: yes
-        * type: `String`
-        * http method of request
-
-#### Shared Parameters
-
-***Shared by all methods***
-
-* *uri*
-    * required: yes
-    * type: `String`
-    * will merge to the restEndpoint provided using [url.resolve][2]
-* *options*
-    * required: no
-    * type: `Object`
-    * when using callback `null` will need to be passed if not needed
-    * *properties*
-        * requestOptions
-            *  type: `Object`
-            * options passed during call to REST API. See [request modules options][3]
-        * authOptions
-            *  type: `Object`
-            * options passed when [Fuel Auth requests token][4]. See [request modules options][3]
-                * requestOptions - not required
-                * forceRequest - not required
-* *callback( error, data )*
-    * required: no
-    * type: `Function`
-    * function that will be executed after request completes
-    * *parameters*
-        * error - error encountered. `null` if no error
-        * data - object with data and response
-            * res ( data.res ) - full response from API call
-            * body ( data.body ) - parsed payload from API call
-
-***Shared by post, put, delete***
-
-* *data*
-    * required: no
-    * type: `Object`
-    * is data the will be posted to REST API
-        * will be deep merged into `options.requestOptions.json`
+* **apiRequest( options, callback )**
+    * `options` - [see request modules options][3]
+    * `options.auth` - will be passed into [getAccessToken][4] inside Fuel Auth
+    * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve][2])
+    * `callback` - executed after task is completed. **required**
+* **get | post | put | delete( options, callback )**
+    * `options` - see apiRequest options
+    * `callback` - see apiRequest options
+    * Request method will be overwritten by these methods. It will be set to same value as the name of the method used
 
 ## Setting up the client
 
 ```js
 var FuelRest = require( 'fuel-rest' );
-var alternateEndpoint;
-var options = {
-    requestOptions: {
-        // options you want on the REST call
+var options  = {
+    auth: {
+        // options you want passed when Fuel Auth is initialized
+        clientId: 'clientId'
+        , clientSecret: 'clientSecret'
     }
-    , authOptions: {
-        // options you want on the Auth call
-    }
+    , origin: 'https://alternate.rest.endpoint.com' // default --> https://www.exacttargetapis.com
 };
 
-var RestClient = new FuelRest({
-    clientId: 'clientId'
-    , clientSecret: 'clientSecret'
-}, alternateEndpoint );
+var RestClient = new FuelRest( options );
 ```
 
 
 ## Examples
 
 ```js
-RestClient.get( '/platform/v1/endpoints', options, function( err, response ) {
+var options = {
+    uri: '/platform/v1/endpoints'
+    headers: {}
+    // other request options
+};
+
+RestClient.get( options, function( err, response ) {
     if( err ) {
         // error here
         console.log( error );

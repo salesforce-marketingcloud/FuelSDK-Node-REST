@@ -70,6 +70,15 @@ describe( 'apiRequest method', function() {
 		});
 	});
 
+	it( 'should throw an error if no callback is present', function() {
+		try {
+			RestClient.apiRequest( null, null );
+		} catch( err ) {
+			expect( err.name ).to.equal( 'TypeError' );
+			expect( err.message ).to.equal( 'callback argument is required' );
+		}
+	});
+
 	it( 'should make a requset to the API', function( done ) {
 		var options = {
 			method: 'GET'
