@@ -39,10 +39,15 @@ describe( 'apiRequest method', function() {
 
 	before( function() {
 		// setting up rest client for all tests to use
-		RestClient = new FuelRest({
-			clientId: 'testing'
-			, clientSecret: 'testing'
-		}, localhost );
+		var options = {
+			auth: {
+				clientId: 'testing'
+				, clientSecret: 'testing'
+			}
+			, restEndpoint: localhost
+		};
+
+		RestClient = new FuelRest( options );
 
 		// faking auth
 		RestClient.AuthClient.accessToken = 'testForRest';
@@ -155,10 +160,15 @@ describe( 'apiRequest method', function() {
 		});
 
 		// creating local rest client so we can use stubbed auth function
-		var RestClient = new FuelRest({
-			clientId: 'testing'
-			, clientSecret: 'testing'
-		}, localhost );
+		var options = {
+			auth: {
+				clientId: 'testing'
+				, clientSecret: 'testing'
+			}
+			, restEndpoint: localhost
+		};
+
+		var RestClient = new FuelRest( options );
 
 		RestClient.apiRequest( 'get', '/get/test', null, function( err, data ) {
 			// error should be passed, and data should be null
@@ -184,10 +194,15 @@ describe( 'apiRequest method', function() {
 		});
 
 		// creating local rest client so we can use stubbed auth function
-		var RestClient = new FuelRest({
-			clientId: 'testing'
-			, clientSecret: 'testing'
-		}, localhost );
+		var options = {
+			auth: {
+				clientId: 'testing'
+				, clientSecret: 'testing'
+			}
+			, restEndpoint: localhost
+		};
+
+		var RestClient = new FuelRest( options );
 
 		RestClient.apiRequest( 'get', '/get/test', null, function( err, data ) {
 			// error should be passed, and data should be null

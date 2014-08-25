@@ -5,16 +5,16 @@ This library allows users access to ExactTarget's REST API at a low level.
 
 ## API
 
-**new FuelRest( authOptions, restEndpoint )** - Initialization
+**new FuelRest( options )** - Initialization
 
-* *authOptions*
-    * required: yes
-    * type: `Object`
-    * properties need to match [FuelAuth Initialization][1]
-* *restEndpoint*
-    * required: no
-    * type: `String`
-    * default: https://www.exacttargetapis.com
+* `options.auth`
+    * Required: yes
+    * Type: `Object` or [FuelAuth Instance][1]
+    * properties need to match [FuelAuth][1]
+* `options.origin` or `options.restEndpoint`
+    * Required: no
+    * Type: `String`
+    * Default: https://www.exacttargetapis.com
 
 ### HTTP Methods
 
@@ -121,7 +121,7 @@ RestClient.get( '/platform/v1/endpoints', options, function( err, response ) {
     * initial module
     * initial unit tests
 
-[1]: https://github.com/ExactTarget/Fuel-Node-Auth#api
+[1]: https://github.com/ExactTarget/Fuel-Node-Auth#initialization
 [2]: http://nodejs.org/api/url.html#url_url_resolve_from_to
 [3]: https://github.com/mikeal/request#requestoptions-callback
 [4]: https://github.com/ExactTarget/Fuel-Node-Auth#api

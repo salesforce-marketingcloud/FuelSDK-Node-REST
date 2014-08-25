@@ -37,17 +37,20 @@ describe( 'General Tests', function() {
 
 	it( 'should require auth options', function() {
 		var RestClient;
+		var options = {
+			auth: {
+				clientId: 'testing'
+				, clientSecret: 'testing'
+			}
+		};
 
 		try {
 			RestClient = new FuelRest();
 		} catch( err ) {
-			expect( err.message ).to.equal( 'options are required. see readme.' );
+			expect( err.message ).to.equal( 'clientId or clientSecret is missing or invalid' );
 		}
 
-		RestClient = new FuelRest({
-			clientId: 'testing'
-			, clientSecret: 'testing'
-		});
+		RestClient = new FuelRest( options );
 
 		// rest client should have an instance of an auth client
 		expect( RestClient.AuthClient instanceof FuelAuth ).to.be.true;
@@ -55,33 +58,37 @@ describe( 'General Tests', function() {
 
 	it( 'should use already initialized fuel auth client', function() {
 		var AuthClient, RestClient;
-
-		AuthClient = new FuelAuth({
+		var authOptions = {
 			clientId: 'testing'
 			, clientSecret: 'testing'
-		});
+		};
+
+		AuthClient = new FuelAuth( authOptions );
 
 		AuthClient.test = true;
 
-		RestClient = new FuelRest( AuthClient );
+		RestClient = new FuelRest({ auth: AuthClient });
 
 		expect( RestClient.AuthClient.test ).to.be.true;
 	});
 
 	it( 'should take a custom rest endpoint', function() {
+		var options = {
+			auth: {
+				clientId: 'testing'
+				, clientSecret: 'testing'
+			}
+		};
+
 		// testing default initialization
-		var RestClient = new FuelRest({
-			clientId: 'testing'
-			, clientSecret: 'testing'
-		});
+		var RestClient = new FuelRest( options );
 
 		expect( RestClient.requestOptions.uri ).to.equal( 'https://www.exacttargetapis.com' );
 
+		options.restEndpoint = 'https://www.exacttarget.com';
+
 		// testing custom endpoint
-		RestClient = new FuelRest({
-			clientId: 'testing'
-			, clientSecret: 'testing'
-		}, 'https://www.exacttarget.com' );
+		RestClient = new FuelRest( options );
 
 		expect( RestClient.requestOptions.uri ).to.equal( 'https://www.exacttarget.com' );
 	});

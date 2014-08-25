@@ -48,10 +48,16 @@ describe( 'HTTP methods', function() {
 		it( 'should deliver a GET + response', function(done) {
 			// setting up spy and rest client
 			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
-			var RestClient    = new FuelRest({
-				clientId: 'testing'
-				, clientSecret: 'testing'
-			}, localhost );
+
+			// initialization options
+			var options = {
+				auth: {
+					clientId: 'testing'
+					, clientSecret: 'testing'
+				}
+				, restEndpoint: localhost
+			};
+			var RestClient    = new FuelRest( options );
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
@@ -75,16 +81,22 @@ describe( 'HTTP methods', function() {
 			// request spy
 			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
 
+			// initialization options
+			var options = {
+				auth: {
+					clientId: 'testing'
+					, clientSecret: 'testing'
+				}
+				, restEndpoint: localhost
+			};
+
 			// post data, will only return response if this is correct
 			var postData = {
 				testingData: 'test data'
 			};
 
 			// rest client setup
-			var RestClient = new FuelRest({
-				clientId: 'testing'
-				, clientSecret: 'testing'
-			}, localhost );
+			var RestClient = new FuelRest( options );
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
@@ -110,16 +122,22 @@ describe( 'HTTP methods', function() {
 			// request spy
 			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
 
+			// initialization options
+			var options = {
+				auth: {
+					clientId: 'testing'
+					, clientSecret: 'testing'
+				}
+				, restEndpoint: localhost
+			};
+
 			// post data, will only return response if this is correct
 			var postData = {
 				testingData: 'test data'
 			};
 
 			// rest client setup
-			var RestClient = new FuelRest({
-				clientId: 'testing'
-				, clientSecret: 'testing'
-			}, localhost );
+			var RestClient = new FuelRest( options );
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
@@ -144,16 +162,22 @@ describe( 'HTTP methods', function() {
 			// request spy
 			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
 
+			// initialization options
+			var options = {
+				auth: {
+					clientId: 'testing'
+					, clientSecret: 'testing'
+				}
+				, restEndpoint: localhost
+			};
+
 			// post data, will only return response if this is correct
 			var postData = {
 				testingData: 'test data'
 			};
 
 			// rest client setup
-			var RestClient = new FuelRest({
-				clientId: 'testing'
-				, clientSecret: 'testing'
-			}, localhost );
+			var RestClient = new FuelRest( options );
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
