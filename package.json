@@ -1,6 +1,6 @@
 {
   "name": "fuel-rest",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Node Library for performing REST API calls with ExactTarget Fuel.",
   "main": "./lib/fuel-rest.js",
   "scripts": {

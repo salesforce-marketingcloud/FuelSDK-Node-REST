@@ -111,6 +111,8 @@ RestClient.get( '/platform/v1/endpoints', options, function( err, response ) {
 
 ## ChangeLog
 
+* **0.4.0** - 2014-08-25
+    * changed object initialization - *breaking*
 * **0.3.0** - 2014-08-20
     * added ability to use initialized fuel auth
     * updated travis ci config
