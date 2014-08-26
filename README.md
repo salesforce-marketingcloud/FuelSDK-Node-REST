@@ -70,6 +70,8 @@ RestClient.get( options, function( err, response ) {
 
 ## ChangeLog
 
+* **0.5.0** - 2014-08-26
+    * api overhaul (apiRequest + all http methods) - *breaking*
 * **0.4.0** - 2014-08-25
     * changed object initialization - *breaking*
 * **0.3.0** - 2014-08-20
