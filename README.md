@@ -23,7 +23,7 @@ This library allows users access to ExactTarget's REST API at a low level.
     * `options.auth` - will be passed into [getAccessToken][4] inside Fuel Auth
     * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve][2])
     * `callback` - executed after task is completed. **required**
-* **get | post | put | delete( options, callback )**
+* **get | post | put | patch | delete( options, callback )**
     * `options` - see apiRequest options
     * `callback` - see apiRequest options
     * Request method will be overwritten by these methods. It will be set to same value as the name of the method used
