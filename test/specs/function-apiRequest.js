@@ -61,8 +61,31 @@ describe( 'apiRequest method', function() {
 		server.close();
 	});
 
+	it( 'should return an error when no options are passed', function( done ) {
+		RestClient.apiRequest( null, function( err, data ) {
+			expect( err.errorPropagatedFrom ).to.equal( 'FuelRest - apiRequest' );
+			expect( err.message ).to.equal( 'options are required' );
+			expect( data ).to.be.null;
+			done();
+		});
+	});
+
+	it( 'should throw an error if no callback is present', function() {
+		try {
+			RestClient.apiRequest( null, null );
+		} catch( err ) {
+			expect( err.name ).to.equal( 'TypeError' );
+			expect( err.message ).to.equal( 'callback argument is required' );
+		}
+	});
+
 	it( 'should make a requset to the API', function( done ) {
-		RestClient.apiRequest( 'get', '/get/test', null, function( err, data ) {
+		var options = {
+			method: 'GET'
+			, uri: '/get/test'
+		};
+
+		RestClient.apiRequest( options, function( err, data ) {
 			// making sure original request was GET
 			expect( data.res.req.method ).to.equal( 'GET' );
 
@@ -72,17 +95,17 @@ describe( 'apiRequest method', function() {
 	});
 
 	it( 'should add extra headers to default headers', function( done ) {
-		var localOptions = {
-			requestOptions: {
-				headers: {
-					'X-Test-Header': 'testing value'
-				}
+		var options = {
+			method: 'GET'
+			, uri: '/get/test'
+			, headers: {
+				'X-Test-Header': 'testing value'
 			}
 		};
 
-		RestClient.apiRequest( 'get', '/get/test', localOptions, function( err, data ) {
+		RestClient.apiRequest( options, function( err, data ) {
 			// making sure custom header was sent in request
-			expect( data.res.req._headers['x-test-header'] ).to.equal( localOptions.requestOptions.headers[ 'X-Test-Header' ] );
+			expect( data.res.req._headers['x-test-header'] ).to.equal( options.headers[ 'X-Test-Header' ] );
 
 			// finish async test
 			done();
@@ -90,15 +113,15 @@ describe( 'apiRequest method', function() {
 	});
 
 	it( 'should add extra options to request module - testing qs', function( done ) {
-		var localOptions = {
-			requestOptions: {
-				qs: {
-					'test': 1
-				}
+		var options = {
+			method: 'GET'
+			, uri: '/get/test'
+			, qs: {
+				'test': 1
 			}
 		};
 
-		RestClient.apiRequest( 'get', '/get/test', localOptions, function( err, data ) {
+		RestClient.apiRequest( options, function( err, data ) {
 			// checking to make sure path on request was correct
 			expect( data.res.req.path ).to.equal( '/get/test?test=1' );
 
@@ -108,17 +131,17 @@ describe( 'apiRequest method', function() {
 	});
 
 	it( 'should override Authorization header if passed', function( done ) {
-		var localOptions = {
-			requestOptions: {
-				headers: {
-					Authorization: 'Bearer diffTestForRest'
-				}
+		var options = {
+			method: 'GET'
+			, uri: '/get/test'
+			, headers: {
+				Authorization: 'Bearer diffTestForRest'
 			}
 		};
 
-		RestClient.apiRequest( 'get', '/get/test', localOptions, function( err, data ) {
+		RestClient.apiRequest( options, function( err, data ) {
 			// making sure different auth header was sent in request
-			expect( data.res.req._headers.authorization ).to.equal( localOptions.requestOptions.headers.Authorization );
+			expect( data.res.req._headers.authorization ).to.equal( options.headers.Authorization );
 
 			// finish async test
 			done();
@@ -126,7 +149,12 @@ describe( 'apiRequest method', function() {
 	});
 
 	it( 'should return an error when application type returned is not application/json', function( done ) {
-		RestClient.apiRequest( 'get', '/not/json/response', null, function( err, data ) {
+		var options = {
+			method: 'GET'
+			, uri: '/not/json/response'
+		};
+
+		RestClient.apiRequest( options, function( err, data ) {
 			// error should be passed, and data should be null
 			expect( !!err ).to.be.true;
 			expect( err.message ).to.equal( 'API did not return JSON' );
@@ -138,7 +166,12 @@ describe( 'apiRequest method', function() {
 	});
 
 	it( 'should error when request module errors', function( done ) {
-		RestClient.apiRequest( 'TEST', '/not/json/response', null, function( err, data ) {
+		var options = {
+			method: 'TEST'
+			, uri: '/not/json/response'
+		};
+
+		RestClient.apiRequest( options, function( err, data ) {
 			// error should be passed, and data should be null
 			expect( !!err ).to.be.true;
 			expect( err.errorPropagatedFrom ).to.equal( 'Request Module inside apiRequest' );
@@ -160,7 +193,7 @@ describe( 'apiRequest method', function() {
 		});
 
 		// creating local rest client so we can use stubbed auth function
-		var options = {
+		var initOptions = {
 			auth: {
 				clientId: 'testing'
 				, clientSecret: 'testing'
@@ -168,9 +201,13 @@ describe( 'apiRequest method', function() {
 			, restEndpoint: localhost
 		};
 
-		var RestClient = new FuelRest( options );
+		var RestClient = new FuelRest( initOptions );
+		var reqOptions = {
+			method: 'GET'
+			, uri: '/get/test'
+		};
 
-		RestClient.apiRequest( 'get', '/get/test', null, function( err, data ) {
+		RestClient.apiRequest( reqOptions, function( err, data ) {
 			// error should be passed, and data should be null
 			expect( !!err ).to.be.true;
 			expect( err.errorPropagatedFrom ).to.equal( 'FuelAuth' );
@@ -194,7 +231,7 @@ describe( 'apiRequest method', function() {
 		});
 
 		// creating local rest client so we can use stubbed auth function
-		var options = {
+		var initOptions = {
 			auth: {
 				clientId: 'testing'
 				, clientSecret: 'testing'
@@ -202,9 +239,13 @@ describe( 'apiRequest method', function() {
 			, restEndpoint: localhost
 		};
 
-		var RestClient = new FuelRest( options );
+		var RestClient = new FuelRest( initOptions );
+		var reqOptions = {
+			method: 'GET'
+			, uri: '/get/test'
+		};
 
-		RestClient.apiRequest( 'get', '/get/test', null, function( err, data ) {
+		RestClient.apiRequest( reqOptions, function( err, data ) {
 			// error should be passed, and data should be null
 			expect( !!err ).to.be.true;
 			expect( err.errorPropagatedFrom ).to.equal( 'FuelAuth' );

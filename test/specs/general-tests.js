@@ -83,14 +83,14 @@ describe( 'General Tests', function() {
 		// testing default initialization
 		var RestClient = new FuelRest( options );
 
-		expect( RestClient.requestOptions.uri ).to.equal( 'https://www.exacttargetapis.com' );
+		expect( RestClient.origin ).to.equal( 'https://www.exacttargetapis.com' );
 
-		options.restEndpoint = 'https://www.exacttarget.com';
+		options.origin = 'https://www.exacttarget.com';
 
 		// testing custom endpoint
 		RestClient = new FuelRest( options );
 
-		expect( RestClient.requestOptions.uri ).to.equal( 'https://www.exacttarget.com' );
+		expect( RestClient.origin ).to.equal( 'https://www.exacttarget.com' );
 	});
 
 	it( 'should have apiRequest on prototype', function() {
