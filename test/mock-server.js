@@ -34,6 +34,7 @@ var validUrls = {
 	, delete: '/delete/test'
 	, queryGet: '/get/test?test=1'
 	, notJson: '/not/json/response'
+	, patch: '/patch'
 };
 var sampleResponses = require('./sample-responses');
 
@@ -87,6 +88,12 @@ module.exports = function(port) {
 			}
 
 			if( req.url === validUrls.delete && req.body.testingData === 'test data' && req.method === 'DELETE' ) {
+				res.statusCode = 200;
+				res.end( JSON.stringify( sampleResponses.post200 ) );
+				return;
+			}
+
+			if( req.url === validUrls.patch && req.body.testingData === 'test data' && req.method === 'PATCH' ) {
 				res.statusCode = 200;
 				res.end( JSON.stringify( sampleResponses.post200 ) );
 				return;

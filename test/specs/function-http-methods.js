@@ -159,6 +159,47 @@ describe( 'HTTP methods', function() {
 		});
 	});
 
+	describe( 'PATCH', function() {
+		it( 'should deliever an PATCH', function( done ) {
+			// request spy
+			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
+
+			// initialization options
+			var initOptions = {
+				auth: {
+					clientId: 'testing'
+					, clientSecret: 'testing'
+				}
+				, restEndpoint: localhost
+			};
+
+			// rest client setup
+			var RestClient = new FuelRest( initOptions );
+			var reqOptions = {
+				uri: '/patch'
+				, json: {
+					testingData: 'test data'
+				}
+			};
+
+			// faking auth
+			RestClient.AuthClient.accessToken = 'testForRest';
+			RestClient.AuthClient.expiration  = 111111111111;
+
+			// doing post
+			RestClient.patch( reqOptions, function( err, data ) {
+				// need to make sure we called apiRequest method
+				expect( apiRequestSpy.calledOnce ).to.be.true;
+
+				// making sure original request was POST
+				expect( data.res.req.method ).to.equal( 'PATCH' );
+
+				FuelRest.prototype.apiRequest.restore(); // restoring function
+				done();
+			});
+		});
+	});
+
 	describe( 'DELETE', function() {
 		it( 'should deliever an DELETE', function( done ) {
 			// request spy
