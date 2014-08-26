@@ -67,9 +67,10 @@ RestClient.get( options, function( err, response ) {
 });
 ```
 
-
 ## ChangeLog
 
+* **0.6.0** - 2014-08-26
+    * added patch method
 * **0.5.0** - 2014-08-26
     * api overhaul (apiRequest + all http methods) - *breaking*
 * **0.4.0** - 2014-08-25
