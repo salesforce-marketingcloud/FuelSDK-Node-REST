@@ -38,4 +38,9 @@ module.exports = {
 		errorcode: 0,
 		message: "Internal Server Error"
 	}
+	, 401: {
+		documentation: ""
+		, errorcode: 1
+		, message: "Unauthorized"
+	}
 };

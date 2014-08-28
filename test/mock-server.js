@@ -35,6 +35,7 @@ var validUrls = {
 	, queryGet: '/get/test?test=1'
 	, notJson: '/not/json/response'
 	, patch: '/patch'
+	, invalidToken: '/invalid/token'
 };
 var sampleResponses = require('./sample-responses');
 
@@ -45,6 +46,7 @@ module.exports = function(port) {
 
 		var _bodyParser   = bodyParser.json();
 		var validUrlCheck = false;
+		var totalRequests = 0;
 
 		res.setHeader('Content-Type', 'application/json');
 
@@ -96,6 +98,23 @@ module.exports = function(port) {
 			if( req.url === validUrls.patch && req.body.testingData === 'test data' && req.method === 'PATCH' ) {
 				res.statusCode = 200;
 				res.end( JSON.stringify( sampleResponses.post200 ) );
+				return;
+			}
+
+			if( req.url === validUrls.invalidToken ) {
+				if( totalRequests === 0 ) {
+					res.writeHead(401, {
+						'www-authenticate': 'Bearer ?invalid_token'
+					});
+					// res.write
+					// res.headers = res.headers || {};
+					// res.headers[ 'www-authenticate' ] = 'Bearer ?invalid_token';
+					res.end( JSON.stringify( sampleResponses[ '401' ] ) );
+				} else {
+					res.statusCode = 200;
+					res.end( JSON.stringify( sampleResponses.get200 ) );
+				}
+				totalRequests++;
 				return;
 			}
 

@@ -259,4 +259,40 @@ describe( 'apiRequest method', function() {
 			done();
 		});
 	});
+
+	it( 'should try request again if 401 stating token is invalid', function( done ) {
+		var requestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
+		sinon.stub( FuelAuth.prototype, '_requestToken', function( requestOptions, callback ) {
+			callback( null, { accessToken: 'testing', expiresIn: 3600 } );
+			return;
+		});
+		// creating local rest client so we can use stubbed auth function
+		var initOptions = {
+			auth: {
+				clientId: 'testing'
+				, clientSecret: 'testing'
+			}
+			, restEndpoint: localhost
+		};
+		var RestClient = new FuelRest( initOptions );
+
+		var reqOptions = {
+			method: 'GET'
+			, uri: '/invalid/token'
+			, retry: true
+			, auth: {
+				force: true
+			}
+		};
+
+		RestClient.apiRequest( reqOptions, function( /*err, data*/ ) {
+			// error should be passed, and data should be null
+			expect( requestSpy.calledTwice ).to.be.true;
+
+			FuelRest.prototype.apiRequest.restore();
+			FuelAuth.prototype._requestToken.restore();
+			// finish async test
+			done();
+		}, true );
+	});
 });
