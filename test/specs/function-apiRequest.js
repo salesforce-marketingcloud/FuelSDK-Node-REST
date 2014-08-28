@@ -29,6 +29,7 @@ var sinon      = require( 'sinon' );
 var mockServer = require( '../mock-server' );
 var FuelRest   = require( '../../lib/fuel-rest' );
 var FuelAuth   = require( 'fuel-auth' );
+var helpers    = require( '../../lib/helpers' );
 var port       = 4550;
 var localhost  = 'http://127.0.0.1:' + port;
 
@@ -285,7 +286,7 @@ describe( 'apiRequest method', function() {
 			}
 		};
 
-		RestClient.apiRequest( reqOptions, function( /*err, data*/ ) {
+		RestClient.apiRequest( reqOptions, function() {
 			// error should be passed, and data should be null
 			expect( requestSpy.calledTwice ).to.be.true;
 
@@ -294,5 +295,20 @@ describe( 'apiRequest method', function() {
 			// finish async test
 			done();
 		}, true );
+	});
+
+	it( 'should use a full URI if provided', function( done ) {
+		var options = {
+			method: 'GET'
+			, uri: localhost + '/get/test'
+		};
+
+		RestClient.apiRequest( options, function( err, data ) {
+			// making sure original request was GET
+			expect( data.res.req.method ).to.equal( 'GET' );
+
+			// finish async test
+			done();
+		});
 	});
 });
