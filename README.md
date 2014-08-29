@@ -1,4 +1,4 @@
-Fuel REST Client (for Node.js)
+Fuel REST Client (for Node.js) [![Build Status](https://travis-ci.org/ExactTarget/Fuel-Node-REST.svg?branch=master)](https://travis-ci.org/ExactTarget/Fuel-Node-REST)
 =============
 
 This library allows users access to ExactTarget's REST API at a low level.
