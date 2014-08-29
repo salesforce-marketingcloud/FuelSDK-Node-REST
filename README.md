@@ -71,7 +71,7 @@ RestClient.get( options, function( err, response ) {
 
 ## ChangeLog
 
-* **0.7.0** - 2014-08-29
+* **0.7.0** - 2014-08-29 (public release, 1st npm version)
     * request retry on 401 invalid token response
     * created helpers file for certain functions
     * updated error delivering/throwing
