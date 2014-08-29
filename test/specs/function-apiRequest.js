@@ -61,13 +61,14 @@ describe( 'apiRequest method', function() {
 		server.close();
 	});
 
-	it( 'should return an error when no options are passed', function( done ) {
-		RestClient.apiRequest( null, function( err, data ) {
-			expect( err.errorPropagatedFrom ).to.equal( 'FuelRest - apiRequest' );
-			expect( err.message ).to.equal( 'options are required' );
-			expect( data ).to.be.null;
-			done();
-		});
+	it( 'should throw an error when no options are passed', function() {
+
+		try {
+			RestClient.apiRequest( null, function() {});
+		} catch( err ) {
+			expect( err.name ).to.equal( 'TypeError' );
+			expect( err.message ).to.equal( 'options argument is required' );
+		}
 	});
 
 	it( 'should throw an error if no callback is present', function() {
@@ -254,6 +255,57 @@ describe( 'apiRequest method', function() {
 
 			// restoring stubbed function
 			FuelAuth.prototype._requestToken.restore();
+
+			// finish async test
+			done();
+		});
+	});
+
+	it( 'should try request again if 401 stating token is invalid', function( done ) {
+		var requestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
+		sinon.stub( FuelAuth.prototype, '_requestToken', function( requestOptions, callback ) {
+			callback( null, { accessToken: 'testing', expiresIn: 3600 } );
+			return;
+		});
+		// creating local rest client so we can use stubbed auth function
+		var initOptions = {
+			auth: {
+				clientId: 'testing'
+				, clientSecret: 'testing'
+			}
+			, restEndpoint: localhost
+		};
+		var RestClient = new FuelRest( initOptions );
+
+		var reqOptions = {
+			method: 'GET'
+			, uri: '/invalid/token'
+			, retry: true
+			, auth: {
+				force: true
+			}
+		};
+
+		RestClient.apiRequest( reqOptions, function() {
+			// error should be passed, and data should be null
+			expect( requestSpy.calledTwice ).to.be.true;
+
+			FuelRest.prototype.apiRequest.restore();
+			FuelAuth.prototype._requestToken.restore();
+			// finish async test
+			done();
+		}, true );
+	});
+
+	it( 'should use a full URI if provided', function( done ) {
+		var options = {
+			method: 'GET'
+			, uri: localhost + '/get/test'
+		};
+
+		RestClient.apiRequest( options, function( err, data ) {
+			// making sure original request was GET
+			expect( data.res.req.method ).to.equal( 'GET' );
 
 			// finish async test
 			done();

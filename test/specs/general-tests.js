@@ -112,8 +112,4 @@ describe( 'General Tests', function() {
 	it( 'should have delete on prototype', function() {
 		expect( FuelRest.prototype.delete ).to.be.a( 'function' );
 	});
-
-	it( 'should have _deliverResponse on prototype', function() {
-		expect( FuelRest.prototype._deliverResponse ).to.be.a( 'function' );
-	});
 });
