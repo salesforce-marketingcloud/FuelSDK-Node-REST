@@ -29,7 +29,6 @@ var sinon      = require( 'sinon' );
 var mockServer = require( '../mock-server' );
 var FuelRest   = require( '../../lib/fuel-rest' );
 var FuelAuth   = require( 'fuel-auth' );
-var helpers    = require( '../../lib/helpers' );
 var port       = 4550;
 var localhost  = 'http://127.0.0.1:' + port;
 
@@ -62,13 +61,14 @@ describe( 'apiRequest method', function() {
 		server.close();
 	});
 
-	it( 'should return an error when no options are passed', function( done ) {
-		RestClient.apiRequest( null, function( err, data ) {
-			expect( err.errorPropagatedFrom ).to.equal( 'FuelRest - apiRequest' );
-			expect( err.message ).to.equal( 'options are required' );
-			expect( data ).to.be.null;
-			done();
-		});
+	it( 'should throw an error when no options are passed', function() {
+
+		try {
+			RestClient.apiRequest( null, function() {});
+		} catch( err ) {
+			expect( err.name ).to.equal( 'TypeError' );
+			expect( err.message ).to.equal( 'options argument is required' );
+		}
 	});
 
 	it( 'should throw an error if no callback is present', function() {
