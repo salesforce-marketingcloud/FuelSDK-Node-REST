@@ -22,9 +22,11 @@ This library allows users access to ExactTarget's REST API at a low level.
     * `options` - [see request modules options][3]
     * `options.auth` - will be passed into [getAccessToken][4] inside Fuel Auth
     * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve][2])
+    * `options.retry` - boolean value representing whether or not to retry request (and request new token) on 401 invalid token response. `default: false`
     * `callback` - executed after task is completed. **required**
 * **get | post | put | patch | delete( options, callback )**
     * `options` - see apiRequest options
+    * `options.retry` - see above for description. `default: true`
     * `callback` - see apiRequest options
     * Request method will be overwritten by these methods. It will be set to same value as the name of the method used
 
@@ -69,6 +71,10 @@ RestClient.get( options, function( err, response ) {
 
 ## ChangeLog
 
+* **0.7.0** - 2014-08-29
+    * request retry on 401 invalid token response
+    * created helpers file for certain functions
+    * updated error delivering/throwing
 * **0.6.0** - 2014-08-26
     * added patch method
 * **0.5.0** - 2014-08-26
