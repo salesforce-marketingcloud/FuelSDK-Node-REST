@@ -71,22 +71,19 @@ RestClient.get( options, function( err, response ) {
 
 ## ChangeLog
 
+* **0.7.1** - 2014-09-09 - removed unneeded "!!"
 * **0.7.0** - 2014-08-29 (public release, 1st npm version)
     * request retry on 401 invalid token response
     * created helpers file for certain functions
     * updated error delivering/throwing
-* **0.6.0** - 2014-08-26
-    * added patch method
-* **0.5.0** - 2014-08-26
-    * api overhaul (apiRequest + all http methods) - *breaking*
-* **0.4.0** - 2014-08-25
-    * changed object initialization - *breaking*
+* **0.6.0** - 2014-08-26 - added patch method
+* **0.5.0** - 2014-08-26 - API overhaul (apiRequest + all http methods) - *breaking*
+* **0.4.0** - 2014-08-25 - changed object initialization - *breaking*
 * **0.3.0** - 2014-08-20
     * added ability to use initialized fuel auth
     * updated travis ci config
     * added license
-* **0.2.0** - 2014-08-09
-    * removed event emitter - *breaking*
+* **0.2.0** - 2014-08-09 - removed event emitter - *breaking*
 * **0.1.0** - 2014-08-07
     * initial module
     * initial unit tests
