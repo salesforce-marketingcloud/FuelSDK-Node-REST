@@ -77,7 +77,7 @@ RestClient.get( options, function( err, response ) {
 
 ## Contributing
 
-We welcome all contributions and issues! There's only one way to make this better, and that's by using it. If you would like to contribute, please checkout our [guidelines](https://github.com/ExactTarget/Fuel-Node-Auth/wiki/Contributing)!
+We welcome all contributions and issues! There's only one way to make this better, and that's by using it. If you would like to contribute, please checkout our [guidelines](https://github.com/ExactTarget/Fuel-Node-REST/wiki/Contributing)!
 
 ## ChangeLog
 
