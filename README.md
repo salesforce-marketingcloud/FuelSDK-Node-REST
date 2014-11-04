@@ -69,6 +69,16 @@ RestClient.get( options, function( err, response ) {
 });
 ```
 
+## Contributors
+
+* Alex Vernacchia (author) - [twitter](https://twitter.com/vernacchia), [github](https://github.com/vernak2539)
+* Kelly Andrews - [twitter](https://twitter.com/kellyjandrews), [github](https://github.com/kellyjandrews)
+* David Brainer-Banker - [twitter](https://twitter.com/TweetTypography), [github](https://github.com/tweettypography)
+
+## Contributing
+
+We welcome all contributions and issues! There's only one way to make this better, and that's by using it. If you would like to contribute, please checkout our [guidelines](https://github.com/ExactTarget/Fuel-Node-Auth/wiki/Contributing)!
+
 ## ChangeLog
 
 * **0.7.2** - 2014-10-16 - account for content-type header not being present on API response
