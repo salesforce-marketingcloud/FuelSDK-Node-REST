@@ -3,6 +3,10 @@ Fuel REST Client (for Node.js) [![Build Status](https://travis-ci.org/ExactTarge
 
 This library allows users access to ExactTarget's REST API at a low level.
 
+```
+npm install fuel-rest --save
+```
+
 ## Initialization
 
 **new FuelRest( options )** - Initialization
