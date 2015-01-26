@@ -55,7 +55,7 @@ var RestClient = new FuelRest( options );
 
 ```js
 var options = {
-    uri: '/platform/v1/endpoints'
+    uri: '/platform/v1/endpoints',
     headers: {}
     // other request options
 };
@@ -63,7 +63,7 @@ var options = {
 RestClient.get( options, function( err, response ) {
     if( err ) {
         // error here
-        console.log( error );
+        console.log( err );
     }
 
     // will be delivered with 200, 400, 401, 500, etc status codes
