@@ -23,6 +23,7 @@
     "define": true,
     "describe": true,
     "it": true,
-    "expect": true
+    "expect": true,
+    "Promise": true
   }
 }
