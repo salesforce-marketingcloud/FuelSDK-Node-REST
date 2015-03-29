@@ -25,12 +25,14 @@
 */
 
 var expect     = require( 'chai' ).expect;
-var sinon      = require( 'sinon' );
-var mockServer = require( '../mock-server' );
-var FuelRest   = require( '../../lib/fuel-rest' );
 var FuelAuth   = require( 'fuel-auth' );
+var FuelRest   = require( '../../lib/fuel-rest' );
+var mockServer = require( '../mock-server' );
 var port       = 4550;
-var localhost  = 'http://127.0.0.1:' + port;
+var Promiser   = (typeof Promise === 'undefined') ? require('promise') : Promise;
+var sinon      = require( 'sinon' );
+
+var localhost = 'http://127.0.0.1:' + port;
 
 describe( 'apiRequest method', function() {
 	'use strict';
@@ -226,9 +228,10 @@ describe( 'apiRequest method', function() {
 
 	it( 'should handle an error from the Auth Client', function( done ) {
 		// stubbing response from auth client with no access token
-		sinon.stub( FuelAuth.prototype, '_requestToken', function( requestOptions, callback ) {
-			callback( new Error( 'error from auth client' ), null );
-			return;
+		sinon.stub( FuelAuth.prototype, '_requestToken', function() {
+			return new Promiser(function(resolve, reject) {
+				reject(new Error( 'error from auth client' ));
+			});
 		});
 
 		// creating local rest client so we can use stubbed auth function
@@ -263,9 +266,10 @@ describe( 'apiRequest method', function() {
 
 	it( 'should try request again if 401 stating token is invalid', function( done ) {
 		var requestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
-		sinon.stub( FuelAuth.prototype, '_requestToken', function( requestOptions, callback ) {
-			callback( null, { accessToken: 'testing', expiresIn: 3600 } );
-			return;
+		sinon.stub( FuelAuth.prototype, '_requestToken', function() {
+			return new Promiser(function(resolve) {
+				resolve({ accessToken: 'testing', expiresIn: 3600 });
+			});
 		});
 		// creating local rest client so we can use stubbed auth function
 		var initOptions = {

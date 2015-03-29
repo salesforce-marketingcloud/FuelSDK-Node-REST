@@ -93,6 +93,23 @@ describe( 'General Tests', function() {
 		expect( RestClient.origin ).to.equal( 'https://www.exacttarget.com' );
 	});
 
+	it('should merge module level headers into default headers', function() {
+		var options = {
+			auth: {
+				clientId: 'testing'
+				, clientSecret: 'testing'
+			}
+			, headers: {
+				'test': 1
+			}
+		};
+
+		// testing default initialization
+		var RestClient = new FuelRest( options );
+
+		expect(RestClient.defaultHeaders.test).to.equal(1);
+	});
+
 	it( 'should have apiRequest on prototype', function() {
 		expect( FuelRest.prototype.apiRequest ).to.be.a( 'function' );
 	});
