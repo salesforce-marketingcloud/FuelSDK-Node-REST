@@ -19,6 +19,10 @@ npm install fuel-rest --save
     * Required: no
     * Type: `String`
     * Default: https://www.exacttargetapis.com
+* `options.headers`
+    * Required: no
+    * Type: `Object`
+    * set headers that apply to all REST requests (not auth requests)
 
 ## API
 
