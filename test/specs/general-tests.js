@@ -107,9 +107,6 @@ describe( 'General Tests', function() {
 		// testing default initialization
 		var RestClient = new FuelRest( options );
 
-		console.log(RestClient.defaultHeaders);
-
-
 		expect(RestClient.defaultHeaders.test).to.equal(1);
 	});
 
