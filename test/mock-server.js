@@ -26,6 +26,7 @@
 
 var http            = require('http');
 var bodyParser      = require('body-parser');
+var _               = require('lodash');
 var validUrls       = require('./config').routes;
 var sampleResponses = require('./sample-responses');
 
@@ -35,21 +36,12 @@ module.exports = function(port) {
 	return http.createServer(function(req, res) {
 
 		var _bodyParser   = bodyParser.json();
-		var validUrlCheck = false;
 		var totalRequests = 0;
 
 		res.setHeader('Content-Type', 'application/json');
 
 		// check for valid URL (404)
-		for( var key in validUrls ) {
-			if( validUrls.hasOwnProperty( key ) ) {
-				if( validUrls[ key ] === req.url ) {
-					validUrlCheck = true;
-				}
-			}
-		}
-
-		if( !validUrlCheck ) {
+		if(!_.contains(_.values(validUrls), req.url)) {
 			res.statusCode = 404;
 			res.end(JSON.stringify(sampleResponses['404']));
 			return;
