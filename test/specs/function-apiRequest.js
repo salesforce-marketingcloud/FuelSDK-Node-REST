@@ -31,6 +31,7 @@ var mockServer = require( '../mock-server' );
 var port       = 4550;
 var Promiser   = (typeof Promise === 'undefined') ? require('promise') : Promise;
 var sinon      = require( 'sinon' );
+var routes     = require('../config').routes;
 
 var localhost = 'http://127.0.0.1:' + port;
 
@@ -85,7 +86,7 @@ describe( 'apiRequest method', function() {
 	it( 'should make a requset to the API', function( done ) {
 		var options = {
 			method: 'GET'
-			, uri: '/get/test'
+			, uri: routes.get
 		};
 
 		RestClient.apiRequest( options, function( err, data ) {
@@ -100,7 +101,7 @@ describe( 'apiRequest method', function() {
 	it( 'should add extra headers to default headers', function( done ) {
 		var options = {
 			method: 'GET'
-			, uri: '/get/test'
+			, uri: routes.get
 			, headers: {
 				'X-Test-Header': 'testing value'
 			}
@@ -118,7 +119,7 @@ describe( 'apiRequest method', function() {
 	it( 'should add extra options to request module - testing qs', function( done ) {
 		var options = {
 			method: 'GET'
-			, uri: '/get/test'
+			, uri: routes.get
 			, qs: {
 				'test': 1
 			}
@@ -136,7 +137,7 @@ describe( 'apiRequest method', function() {
 	it( 'should override Authorization header if passed', function( done ) {
 		var options = {
 			method: 'GET'
-			, uri: '/get/test'
+			, uri: routes.get
 			, headers: {
 				Authorization: 'Bearer diffTestForRest'
 			}
@@ -154,7 +155,7 @@ describe( 'apiRequest method', function() {
 	it( 'should return an error when application type returned is not application/json', function( done ) {
 		var options = {
 			method: 'GET'
-			, uri: '/not/json/response'
+			, uri: routes.notJson
 		};
 
 		RestClient.apiRequest( options, function( err, data ) {
@@ -171,7 +172,7 @@ describe( 'apiRequest method', function() {
 	it( 'should error when request module errors', function( done ) {
 		var options = {
 			method: 'TEST'
-			, uri: '/not/json/response'
+			, uri: routes.notJson
 		};
 
 		RestClient.apiRequest( options, function( err, data ) {
@@ -207,7 +208,7 @@ describe( 'apiRequest method', function() {
 		var RestClient = new FuelRest( initOptions );
 		var reqOptions = {
 			method: 'GET'
-			, uri: '/get/test'
+			, uri: routes.get
 		};
 
 		RestClient.apiRequest( reqOptions, function( err, data ) {
@@ -246,7 +247,7 @@ describe( 'apiRequest method', function() {
 		var RestClient = new FuelRest( initOptions );
 		var reqOptions = {
 			method: 'GET'
-			, uri: '/get/test'
+			, uri: routes.get
 		};
 
 		RestClient.apiRequest( reqOptions, function( err, data ) {
@@ -283,7 +284,7 @@ describe( 'apiRequest method', function() {
 
 		var reqOptions = {
 			method: 'GET'
-			, uri: '/invalid/token'
+			, uri: routes.invalidToken
 			, retry: true
 			, auth: {
 				force: true
@@ -304,7 +305,7 @@ describe( 'apiRequest method', function() {
 	it( 'should use a full URI if provided', function( done ) {
 		var options = {
 			method: 'GET'
-			, uri: localhost + '/get/test'
+			, uri: localhost + routes.get
 		};
 
 		RestClient.apiRequest( options, function( err, data ) {

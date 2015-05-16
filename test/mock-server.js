@@ -24,19 +24,10 @@
 * POSSIBILITY OF SUCH DAMAGE.
 */
 
-var http       = require('http');
-var bodyParser = require('body-parser');
-
-var validUrls = {
-	get: '/get/test'
-	, post: '/post/test'
-	, put: '/update/test'
-	, delete: '/delete/test'
-	, queryGet: '/get/test?test=1'
-	, notJson: '/not/json/response'
-	, patch: '/patch'
-	, invalidToken: '/invalid/token'
-};
+var http            = require('http');
+var bodyParser      = require('body-parser');
+var _               = require('lodash');
+var validUrls       = require('./config').routes;
 var sampleResponses = require('./sample-responses');
 
 module.exports = function(port) {
@@ -44,87 +35,80 @@ module.exports = function(port) {
 
 	return http.createServer(function(req, res) {
 
+		function sendResponse(res, status, data) {
+			res.statusCode = status;
+			res.end( JSON.stringify(data) );
+		}
+
 		var _bodyParser   = bodyParser.json();
-		var validUrlCheck = false;
 		var totalRequests = 0;
 
 		res.setHeader('Content-Type', 'application/json');
 
 		// check for valid URL (404)
-		for( var key in validUrls ) {
-			if( validUrls.hasOwnProperty( key ) ) {
-				if( validUrls[ key ] === req.url ) {
-					validUrlCheck = true;
-				}
-			}
-		}
-
-		if( !validUrlCheck ) {
+		if(!_.contains(_.values(validUrls), req.url)) {
 			res.statusCode = 404;
 			res.end(JSON.stringify(sampleResponses['404']));
 			return;
 		}
 
 		_bodyParser(req, res, function(err) {
+			var data      = req.body.testingData;
+			var reqMethod = req.method;
+			var reqUrl    = req.url;
+			var dataCheck = (data === 'test data');
 
-			if (err) {
+			if(err) {
 				throw new Error('problem with bodyParser');
 			}
 
-			if( req.url === validUrls.get && req.method === 'GET' ) {
-				res.statusCode = 200;
-				res.end( JSON.stringify( sampleResponses.get200 ) );
+			if(reqUrl === validUrls.get && reqMethod === 'GET') {
+				sendResponse(res, 200, sampleResponses.get200);
 				return;
 			}
 
-			if( req.url === validUrls.post && req.body.testingData === 'test data' && req.method === 'POST' ) {
-				res.statusCode = 200;
-				res.end( JSON.stringify( sampleResponses.post200 ) );
+			if(reqUrl === validUrls.post && dataCheck && reqMethod === 'POST') {
+				sendResponse(res, 200, sampleResponses.post200);
 				return;
 			}
 
-			if( req.url === validUrls.put && req.body.testingData === 'test data' && req.method === 'PUT' ) {
+			if(reqUrl === validUrls.put && dataCheck && reqMethod === 'PUT') {
 				res.statusCode = 200;
 				res.end( JSON.stringify( sampleResponses.post200 ) );
 				return;
 			}
 
-			if( req.url === validUrls.delete && req.body.testingData === 'test data' && req.method === 'DELETE' ) {
-				res.statusCode = 200;
-				res.end( JSON.stringify( sampleResponses.post200 ) );
+			if(reqUrl === validUrls.delete && dataCheck && reqMethod === 'DELETE') {
+				sendResponse(res, 200, sampleResponses.post200);
 				return;
 			}
 
-			if( req.url === validUrls.patch && req.body.testingData === 'test data' && req.method === 'PATCH' ) {
-				res.statusCode = 200;
-				res.end( JSON.stringify( sampleResponses.post200 ) );
+			if(reqUrl === validUrls.patch && dataCheck && reqMethod === 'PATCH') {
+				sendResponse(res, 200, sampleResponses.post200);
 				return;
 			}
 
-			if( req.url === validUrls.invalidToken ) {
+			if(reqUrl === validUrls.invalidToken) {
 				if( totalRequests === 0 ) {
 					res.writeHead(401, {
 						'WWW-Authenticate': 'Bearer realm="example.com", error="invalid_token", error_description="The access token expired"'
 					});
 					res.end( JSON.stringify( sampleResponses[ '401' ] ) );
 				} else {
-					res.statusCode = 200;
-					res.end( JSON.stringify( sampleResponses.get200 ) );
+					sendResponse(res, 200, sampleResponses.get200);
 				}
 				totalRequests++;
 				return;
 			}
 
-			if( req.url === validUrls.notJson ) {
+			if(reqUrl === validUrls.notJson) {
 				res.setHeader( 'Content-Type', 'text/html' );
-				res.statusCode = 200;
-				res.end( JSON.stringify( sampleResponses.get200 ) );
+				sendResponse(res, 200, sampleResponses.get200);
 				return;
 			}
 
 			// coverall
-			res.statusCode = 500;
-			res.end(JSON.stringify(sampleResponses['500']));
+			sendResponse(res, 500, sampleResponses['500']);
 			return;
 		});
 	}).listen(port);
