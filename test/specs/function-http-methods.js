@@ -24,12 +24,13 @@
 * POSSIBILITY OF SUCH DAMAGE.
 */
 
-var expect          = require( 'chai' ).expect;
-var sinon           = require( 'sinon' );
-var mockServer      = require( '../mock-server' );
-var FuelRest        = require( '../../lib/fuel-rest' );
-var port            = 4550;
-var localhost       = 'http://127.0.0.1:' + port;
+var expect     = require( 'chai' ).expect;
+var sinon      = require( 'sinon' );
+var mockServer = require( '../mock-server' );
+var FuelRest   = require( '../../lib/fuel-rest' );
+var port       = 4550;
+var localhost  = 'http://127.0.0.1:' + port;
+var routes     = require('../config').routes;
 
 describe( 'HTTP methods', function() {
 	'use strict';
@@ -63,7 +64,7 @@ describe( 'HTTP methods', function() {
 			RestClient.AuthClient.accessToken = 'testForRest';
 			RestClient.AuthClient.expiration  = 111111111111;
 
-			RestClient.get( { uri: '/get/test' }, function( err, data ) {
+			RestClient.get( { uri: routes.get }, function( err, data ) {
 				// need to make sure we called apiRequest method
 				expect( apiRequestSpy.calledOnce ).to.be.true;
 
@@ -93,7 +94,7 @@ describe( 'HTTP methods', function() {
 			// rest client setup
 			var RestClient = new FuelRest( initOptions );
 			var reqOptions = {
-				uri: '/post/test'
+				uri: routes.post
 				, json: {
 					testingData: 'test data'
 				}
@@ -135,7 +136,7 @@ describe( 'HTTP methods', function() {
 			// rest client setup
 			var RestClient = new FuelRest( initOptions );
 			var reqOptions = {
-				uri: '/post/update'
+				uri: routes.put
 				, json: {
 					testingData: 'test data'
 				}
@@ -176,7 +177,7 @@ describe( 'HTTP methods', function() {
 			// rest client setup
 			var RestClient = new FuelRest( initOptions );
 			var reqOptions = {
-				uri: '/patch'
+				uri: routes.patch
 				, json: {
 					testingData: 'test data'
 				}
@@ -217,7 +218,7 @@ describe( 'HTTP methods', function() {
 			// rest client setup
 			var RestClient = new FuelRest( initOptions );
 			var reqOptions = {
-				uri: '/post/delete'
+				uri: routes.delete
 				, json: {
 					testingData: 'test data'
 				}

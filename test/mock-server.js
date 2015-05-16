@@ -24,19 +24,9 @@
 * POSSIBILITY OF SUCH DAMAGE.
 */
 
-var http       = require('http');
-var bodyParser = require('body-parser');
-
-var validUrls = {
-	get: '/get/test'
-	, post: '/post/test'
-	, put: '/update/test'
-	, delete: '/delete/test'
-	, queryGet: '/get/test?test=1'
-	, notJson: '/not/json/response'
-	, patch: '/patch'
-	, invalidToken: '/invalid/token'
-};
+var http            = require('http');
+var bodyParser      = require('body-parser');
+var validUrls       = require('./config').routes;
 var sampleResponses = require('./sample-responses');
 
 module.exports = function(port) {
