@@ -31,7 +31,8 @@ npm install fuel-rest --save
     * `options.auth` - will be passed into [getAccessToken][4] inside Fuel Auth
     * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve][2])
     * `options.retry` - boolean value representing whether or not to retry request (and request new token) on 401 invalid token response. `default: false`
-    * `callback` - executed after task is completed. **required**
+    * `callback` - executed after task is completed.
+        * if no callback is passed, you'll need to use the promise interface
 * **get | post | put | patch | delete(options, callback)**
     * `options` - see apiRequest options
     * `options.retry` - see above for description. `default: true`
@@ -74,6 +75,21 @@ RestClient.get(options, function(err, response) {
     // response.body === payload from response
     // response.res === full response from request client
     console.log(response);
+});
+
+// or with promises
+RestClient
+    .get(options)
+    .then(function(response) {
+        // will be delivered with 200, 400, 401, 500, etc status codes
+        // response.body === payload from response
+        // response.res === full response from request client
+        console.log(response);
+    })
+    .catch(function(err) {
+        // error here
+        console.log(err);
+    });
 });
 ```
 

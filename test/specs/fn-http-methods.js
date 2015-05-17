@@ -35,7 +35,9 @@ var routes     = require('../config').routes;
 describe('HTTP methods', function() {
 	'use strict';
 
-	var server, initOptions, requestOptions;
+	var initOptions;
+	var requestOptions;
+	var server;
 
 	before(function() {
 		server = mockServer(port);
@@ -63,7 +65,8 @@ describe('HTTP methods', function() {
 
 	describe('GET', function() {
 		it('should deliver a GET + response', function(done) {
-			var apiRequestSpy, RestClient;
+			var apiRequestSpy;
+			var RestClient;
 
 			apiRequestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
 			RestClient    = new FuelRest(initOptions);
@@ -87,7 +90,8 @@ describe('HTTP methods', function() {
 
 	describe('POST', function() {
 		it('should deliver a POST', function(done) {
-			var apiRequestSpy, RestClient;
+			var apiRequestSpy;
+			var RestClient;
 
 			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
 			RestClient         = new FuelRest(initOptions);
@@ -114,7 +118,8 @@ describe('HTTP methods', function() {
 
 	describe('PUT', function() {
 		it('should deliever an PUT/UPDATE', function(done) {
-			var apiRequestSpy, RestClient;
+			var apiRequestSpy;
+			var RestClient;
 
 			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
 			RestClient         = new FuelRest(initOptions);
@@ -140,7 +145,8 @@ describe('HTTP methods', function() {
 
 	describe('PATCH', function() {
 		it('should deliever an PATCH', function(done) {
-			var apiRequestSpy, RestClient;
+			var apiRequestSpy;
+			var RestClient;
 
 			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
 			RestClient         = new FuelRest(initOptions);
@@ -166,7 +172,8 @@ describe('HTTP methods', function() {
 
 	describe('DELETE', function() {
 		it('should deliever an DELETE', function(done) {
-			var apiRequestSpy, RestClient;
+			var apiRequestSpy;
+			var RestClient;
 
 			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
 			RestClient         = new FuelRest(initOptions);
