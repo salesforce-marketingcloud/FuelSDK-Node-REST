@@ -9,7 +9,7 @@ npm install fuel-rest --save
 
 ## Initialization
 
-**new FuelRest( options )** - Initialization
+**new FuelRest(options)** - Initialization
 
 * `options.auth`
     * Required: yes
@@ -26,13 +26,13 @@ npm install fuel-rest --save
 
 ## API
 
-* **apiRequest( options, callback )**
+* **apiRequest(options, callback)**
     * `options` - [see request modules options][3]
     * `options.auth` - will be passed into [getAccessToken][4] inside Fuel Auth
     * `options.uri` - can either be a full url or a path that is appended to `options.origin` used at initialization ([url.resolve][2])
     * `options.retry` - boolean value representing whether or not to retry request (and request new token) on 401 invalid token response. `default: false`
     * `callback` - executed after task is completed. **required**
-* **get | post | put | patch | delete( options, callback )**
+* **get | post | put | patch | delete(options, callback)**
     * `options` - see apiRequest options
     * `options.retry` - see above for description. `default: true`
     * `callback` - see apiRequest options
@@ -41,7 +41,7 @@ npm install fuel-rest --save
 ## Setting up the client
 
 ```js
-var FuelRest = require( 'fuel-rest' );
+var FuelRest = require('fuel-rest');
 var options  = {
     auth: {
         // options you want passed when Fuel Auth is initialized
@@ -51,7 +51,7 @@ var options  = {
     , origin: 'https://alternate.rest.endpoint.com' // default --> https://www.exacttargetapis.com
 };
 
-var RestClient = new FuelRest( options );
+var RestClient = new FuelRest(options);
 ```
 
 
@@ -64,16 +64,16 @@ var options = {
     // other request options
 };
 
-RestClient.get( options, function( err, response ) {
-    if( err ) {
+RestClient.get(options, function(err, response) {
+    if(err) {
         // error here
-        console.log( err );
+        console.log(err);
     }
 
     // will be delivered with 200, 400, 401, 500, etc status codes
     // response.body === payload from response
     // response.res === full response from request client
-    console.log( response );
+    console.log(response);
 });
 ```
 

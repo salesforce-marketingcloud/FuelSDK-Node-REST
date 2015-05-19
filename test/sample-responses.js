@@ -29,14 +29,14 @@ module.exports = {
 		endpoints: {
 			test: '/test/test/test'
 		}
-	},
-	post200: {
+	}
+	, post200: {
 		id: 1
-	},
-	500: {
-		documentation: "",
-		errorcode: 0,
-		message: "Internal Server Error"
+	}
+	, 500: {
+		documentation: ""
+		, errorcode: 0
+		, message: "Internal Server Error"
 	}
 	, 401: {
 		documentation: ""

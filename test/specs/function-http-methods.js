@@ -24,52 +24,60 @@
 * POSSIBILITY OF SUCH DAMAGE.
 */
 
-var expect     = require( 'chai' ).expect;
-var sinon      = require( 'sinon' );
-var mockServer = require( '../mock-server' );
-var FuelRest   = require( '../../lib/fuel-rest' );
+var expect     = require('chai').expect;
+var sinon      = require('sinon');
+var mockServer = require('../mock-server');
+var FuelRest   = require('../../lib/fuel-rest');
 var port       = 4550;
 var localhost  = 'http://127.0.0.1:' + port;
 var routes     = require('../config').routes;
 
-describe( 'HTTP methods', function() {
+describe('HTTP methods', function() {
 	'use strict';
 
-	var server;
+	var server, initOptions, requestOptions;
 
-	before( function() {
-		server = mockServer( port );
+	before(function() {
+		server = mockServer(port);
 	});
 
 	after(function() {
 		server.close();
 	});
 
-	describe( 'GET', function() {
-		it( 'should deliver a GET + response', function(done) {
-			// setting up spy and rest client
-			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
+	beforeEach(function() {
+		initOptions = {
+			auth: {
+				clientId: 'testing'
+				, clientSecret: 'testing'
+			}
+			, restEndpoint: localhost
+		};
 
-			// initialization options
-			var options = {
-				auth: {
-					clientId: 'testing'
-					, clientSecret: 'testing'
-				}
-				, restEndpoint: localhost
-			};
-			var RestClient    = new FuelRest( options );
+		requestOptions = {
+			json: {
+				testingData: 'test data'
+			}
+		};
+	});
+
+	describe('GET', function() {
+		it('should deliver a GET + response', function(done) {
+			var apiRequestSpy, RestClient;
+
+			apiRequestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
+			RestClient    = new FuelRest(initOptions);
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
 			RestClient.AuthClient.expiration  = 111111111111;
 
-			RestClient.get( { uri: routes.get }, function( err, data ) {
+			RestClient.get({ uri: routes.get }, function(err, data) {
 				// need to make sure we called apiRequest method
-				expect( apiRequestSpy.calledOnce ).to.be.true;
+				expect(apiRequestSpy.calledOnce).to.be.true;
 
 				// making sure original request was GET
-				expect( data.res.req.method ).to.equal( 'GET' );
+				expect(data.res.req.method).to.equal('GET');
 
 				FuelRest.prototype.apiRequest.restore(); // restoring function
 				done();
@@ -77,40 +85,25 @@ describe( 'HTTP methods', function() {
 		});
 	});
 
-	describe( 'POST', function() {
-		it( 'should deliver a POST', function( done ) {
-			// request spy
-			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
+	describe('POST', function() {
+		it('should deliver a POST', function(done) {
+			var apiRequestSpy, RestClient;
 
-			// initialization options
-			var initOptions = {
-				auth: {
-					clientId: 'testing'
-					, clientSecret: 'testing'
-				}
-				, restEndpoint: localhost
-			};
-
-			// rest client setup
-			var RestClient = new FuelRest( initOptions );
-			var reqOptions = {
-				uri: routes.post
-				, json: {
-					testingData: 'test data'
-				}
-			};
+			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
+			RestClient         = new FuelRest(initOptions);
+			requestOptions.uri = routes.post;
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
 			RestClient.AuthClient.expiration  = 111111111111;
 
 			// doing post
-			RestClient.post( reqOptions, function( err, data ) {
+			RestClient.post(requestOptions, function(err, data) {
 				// need to make sure we called apiRequest method
-				expect( apiRequestSpy.calledOnce ).to.be.true;
+				expect(apiRequestSpy.calledOnce).to.be.true;
 
 				// making sure original request was POST
-				expect( data.res.req.method ).to.equal( 'POST' );
+				expect(data.res.req.method).to.equal('POST');
 
 				FuelRest.prototype.apiRequest.restore(); // restoring function
 				done();
@@ -119,40 +112,25 @@ describe( 'HTTP methods', function() {
 		});
 	});
 
-	describe( 'PUT', function() {
-		it( 'should deliever an PUT/UPDATE', function( done ) {
-			// request spy
-			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
+	describe('PUT', function() {
+		it('should deliever an PUT/UPDATE', function(done) {
+			var apiRequestSpy, RestClient;
 
-			// initialization options
-			var initOptions = {
-				auth: {
-					clientId: 'testing'
-					, clientSecret: 'testing'
-				}
-				, restEndpoint: localhost
-			};
-
-			// rest client setup
-			var RestClient = new FuelRest( initOptions );
-			var reqOptions = {
-				uri: routes.put
-				, json: {
-					testingData: 'test data'
-				}
-			};
+			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
+			RestClient         = new FuelRest(initOptions);
+			requestOptions.uri = routes.put;
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
 			RestClient.AuthClient.expiration  = 111111111111;
 
 			// doing post
-			RestClient.put( reqOptions, function( err, data ) {
+			RestClient.put(requestOptions, function(err, data) {
 				// need to make sure we called apiRequest method
-				expect( apiRequestSpy.calledOnce ).to.be.true;
+				expect(apiRequestSpy.calledOnce).to.be.true;
 
 				// making sure original request was POST
-				expect( data.res.req.method ).to.equal( 'PUT' );
+				expect(data.res.req.method).to.equal('PUT');
 
 				FuelRest.prototype.apiRequest.restore(); // restoring function
 				done();
@@ -160,40 +138,25 @@ describe( 'HTTP methods', function() {
 		});
 	});
 
-	describe( 'PATCH', function() {
-		it( 'should deliever an PATCH', function( done ) {
-			// request spy
-			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
+	describe('PATCH', function() {
+		it('should deliever an PATCH', function(done) {
+			var apiRequestSpy, RestClient;
 
-			// initialization options
-			var initOptions = {
-				auth: {
-					clientId: 'testing'
-					, clientSecret: 'testing'
-				}
-				, restEndpoint: localhost
-			};
-
-			// rest client setup
-			var RestClient = new FuelRest( initOptions );
-			var reqOptions = {
-				uri: routes.patch
-				, json: {
-					testingData: 'test data'
-				}
-			};
+			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
+			RestClient         = new FuelRest(initOptions);
+			requestOptions.uri = routes.patch;
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
 			RestClient.AuthClient.expiration  = 111111111111;
 
 			// doing post
-			RestClient.patch( reqOptions, function( err, data ) {
+			RestClient.patch(requestOptions, function(err, data) {
 				// need to make sure we called apiRequest method
-				expect( apiRequestSpy.calledOnce ).to.be.true;
+				expect(apiRequestSpy.calledOnce).to.be.true;
 
 				// making sure original request was POST
-				expect( data.res.req.method ).to.equal( 'PATCH' );
+				expect(data.res.req.method).to.equal('PATCH');
 
 				FuelRest.prototype.apiRequest.restore(); // restoring function
 				done();
@@ -201,40 +164,25 @@ describe( 'HTTP methods', function() {
 		});
 	});
 
-	describe( 'DELETE', function() {
-		it( 'should deliever an DELETE', function( done ) {
-			// request spy
-			var apiRequestSpy = sinon.spy( FuelRest.prototype, 'apiRequest' );
+	describe('DELETE', function() {
+		it('should deliever an DELETE', function(done) {
+			var apiRequestSpy, RestClient;
 
-			// initialization options
-			var initOptions = {
-				auth: {
-					clientId: 'testing'
-					, clientSecret: 'testing'
-				}
-				, restEndpoint: localhost
-			};
-
-			// rest client setup
-			var RestClient = new FuelRest( initOptions );
-			var reqOptions = {
-				uri: routes.delete
-				, json: {
-					testingData: 'test data'
-				}
-			};
+			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
+			RestClient         = new FuelRest(initOptions);
+			requestOptions.uri = routes.delete;
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
 			RestClient.AuthClient.expiration  = 111111111111;
 
 			// doing post
-			RestClient.delete( reqOptions, function( err, data ) {
+			RestClient.delete(requestOptions, function(err, data) {
 				// need to make sure we called apiRequest method
-				expect( apiRequestSpy.calledOnce ).to.be.true;
+				expect(apiRequestSpy.calledOnce).to.be.true;
 
 				// making sure original request was POST
-				expect( data.res.req.method ).to.equal( 'DELETE' );
+				expect(data.res.req.method).to.equal('DELETE');
 
 				FuelRest.prototype.apiRequest.restore(); // restoring function
 				done();
