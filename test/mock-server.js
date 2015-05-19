@@ -35,10 +35,10 @@ module.exports = function(port) {
 
 	return http.createServer(function(req, res) {
 
-		function sendResponse(res, status, data) {
+		var sendResponse = function(res, status, data) {
 			res.statusCode = status;
-			res.end( JSON.stringify(data) );
-		}
+			res.end(JSON.stringify(data));
+		};
 
 		var _bodyParser   = bodyParser.json();
 		var totalRequests = 0;
@@ -74,7 +74,7 @@ module.exports = function(port) {
 
 			if(reqUrl === validUrls.put && dataCheck && reqMethod === 'PUT') {
 				res.statusCode = 200;
-				res.end( JSON.stringify( sampleResponses.post200 ) );
+				res.end(JSON.stringify(sampleResponses.post200));
 				return;
 			}
 
@@ -89,11 +89,11 @@ module.exports = function(port) {
 			}
 
 			if(reqUrl === validUrls.invalidToken) {
-				if( totalRequests === 0 ) {
+				if(totalRequests === 0) {
 					res.writeHead(401, {
 						'WWW-Authenticate': 'Bearer realm="example.com", error="invalid_token", error_description="The access token expired"'
 					});
-					res.end( JSON.stringify( sampleResponses[ '401' ] ) );
+					res.end(JSON.stringify(sampleResponses['401']));
 				} else {
 					sendResponse(res, 200, sampleResponses.get200);
 				}
@@ -102,7 +102,7 @@ module.exports = function(port) {
 			}
 
 			if(reqUrl === validUrls.notJson) {
-				res.setHeader( 'Content-Type', 'text/html' );
+				res.setHeader('Content-Type', 'text/html');
 				sendResponse(res, 200, sampleResponses.get200);
 				return;
 			}
