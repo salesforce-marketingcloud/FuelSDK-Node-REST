@@ -40,17 +40,17 @@ describe('apiRequest method', function() {
 
 	var server, RestClient, requestOptions;
 
+	var initOptions = {
+		auth: {
+			clientId: 'testing'
+			, clientSecret: 'testing'
+		}
+		, restEndpoint: localhost
+	};
+
 	before(function() {
 		// setting up rest client for all tests to use
-		var options = {
-			auth: {
-				clientId: 'testing'
-				, clientSecret: 'testing'
-			}
-			, restEndpoint: localhost
-		};
-
-		RestClient = new FuelRest(options);
+		RestClient = new FuelRest(initOptions);
 
 		// faking auth
 		RestClient.AuthClient.accessToken = 'testForRest';
@@ -173,7 +173,7 @@ describe('apiRequest method', function() {
 	});
 
 	it('should return an error when no accessToken is available', function(done) {
-		var initOptions, RestClient;
+		var RestClient;
 
 		// stubbing response from auth client with no access token
 		sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
@@ -183,15 +183,6 @@ describe('apiRequest method', function() {
 				, message: "Not Found"
 			});
 		});
-
-		// creating local rest client so we can use stubbed auth function
-		initOptions = {
-			auth: {
-				clientId: 'testing'
-				, clientSecret: 'testing'
-			}
-			, restEndpoint: localhost
-		};
 
 		RestClient = new FuelRest(initOptions);
 
@@ -212,7 +203,7 @@ describe('apiRequest method', function() {
 	});
 
 	it('should handle an error from the Auth Client', function(done) {
-		var initOptions, RestClient;
+		var RestClient;
 
 		// stubbing response from auth client with no access token
 		sinon.stub(FuelAuth.prototype, '_requestToken', function() {
@@ -220,15 +211,6 @@ describe('apiRequest method', function() {
 				reject(new Error('error from auth client'));
 			});
 		});
-
-		// creating local rest client so we can use stubbed auth function
-		initOptions = {
-			auth: {
-				clientId: 'testing'
-				, clientSecret: 'testing'
-			}
-			, restEndpoint: localhost
-		};
 
 		RestClient = new FuelRest(initOptions);
 
@@ -248,7 +230,7 @@ describe('apiRequest method', function() {
 	});
 
 	it('should try request again if 401 stating token is invalid', function(done) {
-		var requestSpy, initOptions, RestClient;
+		var requestSpy, RestClient;
 
 		requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
 
@@ -257,15 +239,6 @@ describe('apiRequest method', function() {
 				resolve({ accessToken: 'testing', expiresIn: 3600 });
 			});
 		});
-
-		// creating local rest client so we can use stubbed auth function
-		initOptions = {
-			auth: {
-				clientId: 'testing'
-				, clientSecret: 'testing'
-			}
-			, restEndpoint: localhost
-		};
 
 		RestClient = new FuelRest(initOptions);
 
