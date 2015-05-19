@@ -24,20 +24,21 @@
 * POSSIBILITY OF SUCH DAMAGE.
 */
 
-var expect   = require( 'chai' ).expect;
-var FuelRest = require( '../../lib/fuel-rest' );
-var FuelAuth = require( 'fuel-auth' );
+var expect   = require('chai').expect;
+var FuelRest = require('../../lib/fuel-rest');
+var FuelAuth = require('fuel-auth');
 
-describe( 'General Tests', function() {
+describe('General Tests', function() {
 	'use strict';
 
-	it( 'should be a constructor', function() {
-		expect( FuelRest ).to.be.a( 'function' );
+	it('should be a constructor', function() {
+		expect(FuelRest).to.be.a('function');
 	});
 
-	it( 'should require auth options', function() {
-		var RestClient;
-		var options = {
+	it('should require auth options', function() {
+		var RestClient, options;
+
+		options = {
 			auth: {
 				clientId: 'testing'
 				, clientSecret: 'testing'
@@ -46,34 +47,37 @@ describe( 'General Tests', function() {
 
 		try {
 			RestClient = new FuelRest();
-		} catch( err ) {
-			expect( err.message ).to.equal( 'clientId or clientSecret is missing or invalid' );
+		} catch(err) {
+			expect(err.message).to.equal('clientId or clientSecret is missing or invalid');
 		}
 
-		RestClient = new FuelRest( options );
+		RestClient = new FuelRest(options);
 
 		// rest client should have an instance of an auth client
-		expect( RestClient.AuthClient instanceof FuelAuth ).to.be.true;
+		expect(RestClient.AuthClient instanceof FuelAuth).to.be.true;
 	});
 
-	it( 'should use already initialized fuel auth client', function() {
-		var AuthClient, RestClient;
-		var authOptions = {
+	it('should use already initialized fuel auth client', function() {
+		var AuthClient, RestClient, authOptions;
+
+		authOptions = {
 			clientId: 'testing'
 			, clientSecret: 'testing'
 		};
 
-		AuthClient = new FuelAuth( authOptions );
+		AuthClient = new FuelAuth(authOptions);
 
 		AuthClient.test = true;
 
 		RestClient = new FuelRest({ auth: AuthClient });
 
-		expect( RestClient.AuthClient.test ).to.be.true;
+		expect(RestClient.AuthClient.test).to.be.true;
 	});
 
-	it( 'should take a custom rest endpoint', function() {
-		var options = {
+	it('should take a custom rest endpoint', function() {
+		var RestClient, options;
+
+		options = {
 			auth: {
 				clientId: 'testing'
 				, clientSecret: 'testing'
@@ -81,20 +85,22 @@ describe( 'General Tests', function() {
 		};
 
 		// testing default initialization
-		var RestClient = new FuelRest( options );
+		RestClient = new FuelRest(options);
 
-		expect( RestClient.origin ).to.equal( 'https://www.exacttargetapis.com' );
+		expect(RestClient.origin).to.equal('https://www.exacttargetapis.com');
 
 		options.origin = 'https://www.exacttarget.com';
 
 		// testing custom endpoint
-		RestClient = new FuelRest( options );
+		RestClient = new FuelRest(options);
 
-		expect( RestClient.origin ).to.equal( 'https://www.exacttarget.com' );
+		expect(RestClient.origin).to.equal('https://www.exacttarget.com');
 	});
 
 	it('should merge module level headers into default headers', function() {
-		var options = {
+		var RestClient, options;
+
+		options = {
 			auth: {
 				clientId: 'testing'
 				, clientSecret: 'testing'
@@ -105,28 +111,28 @@ describe( 'General Tests', function() {
 		};
 
 		// testing default initialization
-		var RestClient = new FuelRest( options );
+		RestClient = new FuelRest(options);
 
 		expect(RestClient.defaultHeaders.test).to.equal(1);
 	});
 
-	it( 'should have apiRequest on prototype', function() {
-		expect( FuelRest.prototype.apiRequest ).to.be.a( 'function' );
+	it('should have apiRequest on prototype', function() {
+		expect(FuelRest.prototype.apiRequest).to.be.a('function');
 	});
 
-	it( 'should have get on prototype', function() {
-		expect( FuelRest.prototype.get ).to.be.a( 'function' );
+	it('should have get on prototype', function() {
+		expect(FuelRest.prototype.get).to.be.a('function');
 	});
 
-	it( 'should have post on prototype', function() {
-		expect( FuelRest.prototype.post ).to.be.a( 'function' );
+	it('should have post on prototype', function() {
+		expect(FuelRest.prototype.post).to.be.a('function');
 	});
 
-	it( 'should have put on prototype', function() {
-		expect( FuelRest.prototype.put ).to.be.a( 'function' );
+	it('should have put on prototype', function() {
+		expect(FuelRest.prototype.put).to.be.a('function');
 	});
 
-	it( 'should have delete on prototype', function() {
-		expect( FuelRest.prototype.delete ).to.be.a( 'function' );
+	it('should have delete on prototype', function() {
+		expect(FuelRest.prototype.delete).to.be.a('function');
 	});
 });
