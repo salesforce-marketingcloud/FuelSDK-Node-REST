@@ -19,6 +19,7 @@
   "globals": {
     "require": true,
     "before": true,
+    "beforeEach": true,
     "after": true,
     "define": true,
     "describe": true,
