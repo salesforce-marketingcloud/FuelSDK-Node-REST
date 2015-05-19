@@ -31,19 +31,23 @@ var FuelAuth = require('fuel-auth');
 describe('General Tests', function() {
 	'use strict';
 
-	it('should be a constructor', function() {
-		expect(FuelRest).to.be.a('function');
-	});
+	var options;
 
-	it('should require auth options', function() {
-		var RestClient, options;
-
+	beforeEach(function() {
 		options = {
 			auth: {
 				clientId: 'testing'
 				, clientSecret: 'testing'
 			}
 		};
+	});
+
+	it('should be a constructor', function() {
+		expect(FuelRest).to.be.a('function');
+	});
+
+	it('should require auth options', function() {
+		var RestClient;
 
 		try {
 			RestClient = new FuelRest();
@@ -58,14 +62,9 @@ describe('General Tests', function() {
 	});
 
 	it('should use already initialized fuel auth client', function() {
-		var AuthClient, RestClient, authOptions;
+		var AuthClient, RestClient;
 
-		authOptions = {
-			clientId: 'testing'
-			, clientSecret: 'testing'
-		};
-
-		AuthClient = new FuelAuth(authOptions);
+		AuthClient = new FuelAuth(options.auth);
 
 		AuthClient.test = true;
 
@@ -75,14 +74,7 @@ describe('General Tests', function() {
 	});
 
 	it('should take a custom rest endpoint', function() {
-		var RestClient, options;
-
-		options = {
-			auth: {
-				clientId: 'testing'
-				, clientSecret: 'testing'
-			}
-		};
+		var RestClient;
 
 		// testing default initialization
 		RestClient = new FuelRest(options);
@@ -98,16 +90,10 @@ describe('General Tests', function() {
 	});
 
 	it('should merge module level headers into default headers', function() {
-		var RestClient, options;
+		var RestClient;
 
-		options = {
-			auth: {
-				clientId: 'testing'
-				, clientSecret: 'testing'
-			}
-			, headers: {
-				'test': 1
-			}
+		options.headers = {
+			'test': 1
 		};
 
 		// testing default initialization
