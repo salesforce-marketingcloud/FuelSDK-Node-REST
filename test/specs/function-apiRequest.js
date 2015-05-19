@@ -38,7 +38,7 @@ var localhost = 'http://127.0.0.1:' + port;
 describe('apiRequest method', function() {
 	'use strict';
 
-	var server, RestClient;
+	var server, RestClient, requestOptions;
 
 	before(function() {
 		// setting up rest client for all tests to use
@@ -64,6 +64,13 @@ describe('apiRequest method', function() {
 		server.close();
 	});
 
+	beforeEach(function() {
+		requestOptions = {
+			method: 'GET'
+			, uri: routes.get
+		};
+	});
+
 	it('should throw an error when no options are passed', function() {
 		try {
 			RestClient.apiRequest(null, function() {});
@@ -83,12 +90,7 @@ describe('apiRequest method', function() {
 	});
 
 	it('should make a requset to the API', function(done) {
-		var options = {
-			method: 'GET'
-			, uri: routes.get
-		};
-
-		RestClient.apiRequest(options, function(err, data) {
+		RestClient.apiRequest(requestOptions, function(err, data) {
 			// making sure original request was GET
 			expect(data.res.req.method).to.equal('GET');
 
@@ -98,17 +100,13 @@ describe('apiRequest method', function() {
 	});
 
 	it('should add extra headers to default headers', function(done) {
-		var options = {
-			method: 'GET'
-			, uri: routes.get
-			, headers: {
-				'X-Test-Header': 'testing value'
-			}
+		requestOptions.headers = {
+			'X-Test-Header': 'testing value'
 		};
 
-		RestClient.apiRequest(options, function(err, data) {
+		RestClient.apiRequest(requestOptions, function(err, data) {
 			// making sure custom header was sent in request
-			expect(data.res.req._headers['x-test-header']).to.equal(options.headers['X-Test-Header']);
+			expect(data.res.req._headers['x-test-header']).to.equal(requestOptions.headers['X-Test-Header']);
 
 			// finish async test
 			done();
@@ -116,15 +114,11 @@ describe('apiRequest method', function() {
 	});
 
 	it('should add extra options to request module - testing qs', function(done) {
-		var options = {
-			method: 'GET'
-			, uri: routes.get
-			, qs: {
-				'test': 1
-			}
+		requestOptions.qs = {
+			'test': 1
 		};
 
-		RestClient.apiRequest(options, function(err, data) {
+		RestClient.apiRequest(requestOptions, function(err, data) {
 			// checking to make sure path on request was correct
 			expect(data.res.req.path).to.equal('/get/test?test=1');
 
@@ -134,17 +128,13 @@ describe('apiRequest method', function() {
 	});
 
 	it('should override Authorization header if passed', function(done) {
-		var options = {
-			method: 'GET'
-			, uri: routes.get
-			, headers: {
-				Authorization: 'Bearer diffTestForRest'
-			}
+		requestOptions.headers = {
+			Authorization: 'Bearer diffTestForRest'
 		};
 
-		RestClient.apiRequest(options, function(err, data) {
+		RestClient.apiRequest(requestOptions, function(err, data) {
 			// making sure different auth header was sent in request
-			expect(data.res.req._headers.authorization).to.equal(options.headers.Authorization);
+			expect(data.res.req._headers.authorization).to.equal(requestOptions.headers.Authorization);
 
 			// finish async test
 			done();
@@ -152,12 +142,9 @@ describe('apiRequest method', function() {
 	});
 
 	it('should return an error when application type returned is not application/json', function(done) {
-		var options = {
-			method: 'GET'
-			, uri: routes.notJson
-		};
+		requestOptions.uri = routes.notJson;
 
-		RestClient.apiRequest(options, function(err, data) {
+		RestClient.apiRequest(requestOptions, function(err, data) {
 			// error should be passed, and data should be null
 			expect(!!err).to.be.true;
 			expect(err.message).to.equal('API did not return JSON');
@@ -186,7 +173,7 @@ describe('apiRequest method', function() {
 	});
 
 	it('should return an error when no accessToken is available', function(done) {
-		var initOptions, RestClient, reqOptions;
+		var initOptions, RestClient;
 
 		// stubbing response from auth client with no access token
 		sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
@@ -208,12 +195,7 @@ describe('apiRequest method', function() {
 
 		RestClient = new FuelRest(initOptions);
 
-		reqOptions = {
-			method: 'GET'
-			, uri: routes.get
-		};
-
-		RestClient.apiRequest(reqOptions, function(err, data) {
+		RestClient.apiRequest(requestOptions, function(err, data) {
 			// error should be passed, and data should be null
 			expect(!!err).to.be.true;
 			expect(err.errorPropagatedFrom).to.equal('FuelAuth');
@@ -230,7 +212,7 @@ describe('apiRequest method', function() {
 	});
 
 	it('should handle an error from the Auth Client', function(done) {
-		var initOptions, RestClient, reqOptions;
+		var initOptions, RestClient;
 
 		// stubbing response from auth client with no access token
 		sinon.stub(FuelAuth.prototype, '_requestToken', function() {
@@ -250,12 +232,7 @@ describe('apiRequest method', function() {
 
 		RestClient = new FuelRest(initOptions);
 
-		reqOptions = {
-			method: 'GET'
-			, uri: routes.get
-		};
-
-		RestClient.apiRequest(reqOptions, function(err, data) {
+		RestClient.apiRequest(requestOptions, function(err, data) {
 			// error should be passed, and data should be null
 			expect(!!err).to.be.true;
 			expect(err.errorPropagatedFrom).to.equal('FuelAuth');
@@ -271,9 +248,10 @@ describe('apiRequest method', function() {
 	});
 
 	it('should try request again if 401 stating token is invalid', function(done) {
-		var requestSpy, initOptions, RestClient, reqOptions;
+		var requestSpy, initOptions, RestClient;
 
 		requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
+
 		sinon.stub(FuelAuth.prototype, '_requestToken', function() {
 			return new Promiser(function(resolve) {
 				resolve({ accessToken: 'testing', expiresIn: 3600 });
@@ -288,18 +266,16 @@ describe('apiRequest method', function() {
 			}
 			, restEndpoint: localhost
 		};
+
 		RestClient = new FuelRest(initOptions);
 
-		reqOptions = {
-			method: 'GET'
-			, uri: routes.invalidToken
-			, retry: true
-			, auth: {
-				force: true
-			}
+		requestOptions.uri   = routes.invalidToken;
+		requestOptions.retry = true;
+		requestOptions.auth  = {
+			force: true
 		};
 
-		RestClient.apiRequest(reqOptions, function() {
+		RestClient.apiRequest(requestOptions, function() {
 			// error should be passed, and data should be null
 			expect(requestSpy.calledTwice).to.be.true;
 
@@ -311,12 +287,9 @@ describe('apiRequest method', function() {
 	});
 
 	it('should use a full URI if provided', function(done) {
-		var options = {
-			method: 'GET'
-			, uri: localhost + routes.get
-		};
+		requestOptions.uri = localhost + routes.get;
 
-		RestClient.apiRequest(options, function(err, data) {
+		RestClient.apiRequest(requestOptions, function(err, data) {
 			// making sure original request was GET
 			expect(data.res.req.method).to.equal('GET');
 
