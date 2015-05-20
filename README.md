@@ -39,6 +39,12 @@ npm install fuel-rest --save
     * `callback` - see apiRequest options
     * Request method will be overwritten by these methods. It will be set to same value as the name of the method used
 
+###Callbacks v. Promises
+
+While future versions will disallow using callbacks and promises together, at the moment
+it is possible to do. This will lead to **unexpected behavior**, and you should only one;
+callbacks **OR** promises.
+
 ## Setting up the client
 
 ```js
