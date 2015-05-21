@@ -17,14 +17,14 @@
   "strict": true,
   "unused": true,
   "globals": {
-    "require": true,
+    "Promise": true,
+    "after": true,
+    "afterEach": true,
     "before": true,
     "beforeEach": true,
-    "after": true,
-    "define": true,
     "describe": true,
-    "it": true,
     "expect": true,
-    "Promise": true
+    "it": true,
+    "require": true
   }
 }

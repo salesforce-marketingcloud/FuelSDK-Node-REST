@@ -43,4 +43,5 @@ module.exports = {
 		, errorcode: 1
 		, message: "Unauthorized"
 	}
+	, invalidToken: 'Bearer realm="example.com", error="invalid_token", error_description="The access token expired"'
 };

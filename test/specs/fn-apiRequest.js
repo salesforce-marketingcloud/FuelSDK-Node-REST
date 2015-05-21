@@ -29,7 +29,7 @@ var FuelAuth   = require('fuel-auth');
 var FuelRest   = require('../../lib/fuel-rest');
 var mockServer = require('../mock-server');
 var port       = 4550;
-var Promiser   = (typeof Promise === 'undefined') ? require('promise') : Promise;
+var Promiser   = (typeof Promise === 'undefined') ? require('bluebird') : Promise;
 var sinon      = require('sinon');
 var routes     = require('../config').routes;
 
@@ -38,7 +38,9 @@ var localhost = 'http://127.0.0.1:' + port;
 describe('apiRequest method', function() {
 	'use strict';
 
-	var server, RestClient, requestOptions;
+	var RestClient;
+	var requestOptions;
+	var server;
 
 	var initOptions = {
 		auth: {
@@ -77,15 +79,6 @@ describe('apiRequest method', function() {
 		} catch(err) {
 			expect(err.name).to.equal('TypeError');
 			expect(err.message).to.equal('options argument is required');
-		}
-	});
-
-	it('should throw an error if no callback is present', function() {
-		try {
-			RestClient.apiRequest(null, null);
-		} catch(err) {
-			expect(err.name).to.equal('TypeError');
-			expect(err.message).to.equal('callback argument is required');
 		}
 	});
 
@@ -164,7 +157,6 @@ describe('apiRequest method', function() {
 		RestClient.apiRequest(options, function(err, data) {
 			// error should be passed, and data should be null
 			expect(!!err).to.be.true;
-			expect(err.errorPropagatedFrom).to.equal('Request Module inside apiRequest');
 			expect(data).to.be.null;
 
 			// finish async test
@@ -176,11 +168,15 @@ describe('apiRequest method', function() {
 		var RestClient;
 
 		// stubbing response from auth client with no access token
-		sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
-			callback(null, {
-				documentation: "https://code.docs.exacttarget.com/rest/errors/404"
-				, errorcode: 404
-				, message: "Not Found"
+		sinon.stub(FuelAuth.prototype, 'getAccessToken', function() {
+			return new Promiser(function(resolve) {
+				// fuel auth only rejects if there was an error returned from request
+				// not if the API returned an error code other than 200
+				resolve({
+					documentation: "https://code.docs.exacttarget.com/rest/errors/404"
+					, errorcode: 404
+					, message: "Not Found"
+				});
 			});
 		});
 
@@ -189,7 +185,6 @@ describe('apiRequest method', function() {
 		RestClient.apiRequest(requestOptions, function(err, data) {
 			// error should be passed, and data should be null
 			expect(!!err).to.be.true;
-			expect(err.errorPropagatedFrom).to.equal('FuelAuth');
 			expect(err.message).to.equal('No access token');
 			expect(err.res).to.be.a('object');
 			expect(data).to.be.null;
@@ -217,7 +212,6 @@ describe('apiRequest method', function() {
 		RestClient.apiRequest(requestOptions, function(err, data) {
 			// error should be passed, and data should be null
 			expect(!!err).to.be.true;
-			expect(err.errorPropagatedFrom).to.equal('FuelAuth');
 			expect(err.message).to.equal('error from auth client');
 			expect(data).to.be.null;
 
@@ -230,7 +224,8 @@ describe('apiRequest method', function() {
 	});
 
 	it('should try request again if 401 stating token is invalid', function(done) {
-		var requestSpy, RestClient;
+		var requestSpy;
+		var RestClient;
 
 		requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
 

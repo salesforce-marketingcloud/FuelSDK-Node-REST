@@ -91,7 +91,7 @@ module.exports = function(port) {
 			if(reqUrl === validUrls.invalidToken) {
 				if(totalRequests === 0) {
 					res.writeHead(401, {
-						'WWW-Authenticate': 'Bearer realm="example.com", error="invalid_token", error_description="The access token expired"'
+						'WWW-Authenticate': sampleResponses.invalidToken
 					});
 					res.end(JSON.stringify(sampleResponses['401']));
 				} else {

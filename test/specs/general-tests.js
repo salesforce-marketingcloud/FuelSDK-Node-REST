@@ -62,7 +62,8 @@ describe('General Tests', function() {
 	});
 
 	it('should use already initialized fuel auth client', function() {
-		var AuthClient, RestClient;
+		var AuthClient;
+		var RestClient;
 
 		AuthClient = new FuelAuth(options.auth);
 
