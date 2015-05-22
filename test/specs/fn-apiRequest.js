@@ -265,4 +265,67 @@ describe('apiRequest method', function() {
 			done();
 		});
 	});
+
+	describe('promise integration', function() {
+		it('should be able to use promises', function(done) {
+			RestClient.apiRequest(requestOptions)
+				.then(function(data) {
+					expect(data.body).to.be.exist;
+					expect(data.res).to.be.exist;
+					done();
+				})
+				.catch(function(err) {
+					done(err);
+				});
+		});
+
+		it('should return error from _restRequest', function(done) {
+			sinon.stub(FuelRest.prototype, '_restRequest', function(options, auth, retry, cb) {
+				cb(new Error('testing errors'), null);
+			});
+
+			RestClient.apiRequest(requestOptions)
+				.then(function(data) {
+					done(data);
+				})
+				.catch(function(err) {
+					expect(err).to.exist;
+					FuelRest.prototype._restRequest.restore();
+					done();
+				});
+		});
+
+		it('should return an error when no accessToken is available', function(done) {
+			var RestClient;
+
+			// stubbing response from auth client with no access token
+			sinon.stub(FuelAuth.prototype, 'getAccessToken', function() {
+				return new Promiser(function(resolve) {
+					// fuel auth only rejects if there was an error returned from request
+					// not if the API returned an error code other than 200
+					resolve({
+						documentation: "https://code.docs.exacttarget.com/rest/errors/404"
+						, errorcode: 404
+						, message: "Not Found"
+					});
+				});
+			});
+
+			RestClient = new FuelRest(initOptions);
+
+			RestClient.apiRequest(requestOptions)
+				.then(function(data) {
+					done(data);
+				})
+				.catch(function(err) {
+					// error should be passed, and data should be null
+					expect(err).to.be.exist;
+					expect(err.message).to.equal('No access token');
+					expect(err.res).to.be.a('object');
+
+					FuelAuth.prototype.getAccessToken.restore();
+					done();
+				});
+		});
+	});
 });
