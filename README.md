@@ -39,12 +39,6 @@ npm install fuel-rest --save
     * `callback` - see apiRequest options
     * Request method will be overwritten by these methods. It will be set to same value as the name of the method used
 
-###Callbacks v. Promises
-
-While future versions will disallow using callbacks and promises together, at the moment
-it is possible to do. This will lead to **unexpected behavior**, and you should only one;
-callbacks **OR** promises.
-
 ## Setting up the client
 
 ```js
@@ -64,6 +58,13 @@ var RestClient = new FuelRest(options);
 
 ## Examples
 
+###Callbacks vs. Promises
+
+This library comes standard with callback and promise implementations. You will need
+to choose one **OR** the other.
+
+####Callbacks
+
 ```js
 var options = {
     uri: '/platform/v1/endpoints',
@@ -82,8 +83,11 @@ RestClient.get(options, function(err, response) {
     // response.res === full response from request client
     console.log(response);
 });
+```
 
-// or with promises
+####Promsies
+
+```js
 RestClient
     .get(options)
     .then(function(response) {
