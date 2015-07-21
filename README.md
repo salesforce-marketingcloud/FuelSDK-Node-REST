@@ -109,7 +109,7 @@ RestClient
 
 ## Contributing
 
-We welcome all contributions and issues! There's only one way to make this better, and that's by using it. If you would like to contribute, please checkout our [guidelines](https://github.com/ExactTarget/Fuel-Node-REST/wiki/Contributing)!
+We welcome all contributions and issues! There's only one way to make this better, and that's by using it. If you would like to contribute, please checkout our [guidelines][5]!
 
 ## ChangeLog
 
@@ -136,3 +136,4 @@ We welcome all contributions and issues! There's only one way to make this bette
 [2]: http://nodejs.org/api/url.html#url_url_resolve_from_to
 [3]: https://github.com/mikeal/request#requestoptions-callback
 [4]: https://github.com/salesforcefuel/FuelSDK-Node-Auth/wiki/getAccessToken
+[5]: https://github.com/salesforcefuel/FuelSDK-Node-REST/wiki/Contributing
