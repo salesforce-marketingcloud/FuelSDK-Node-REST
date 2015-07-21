@@ -1,7 +1,9 @@
-Fuel REST Client (for Node.js) [![Build Status](https://travis-ci.org/ExactTarget/Fuel-Node-REST.svg?branch=master)](https://travis-ci.org/ExactTarget/Fuel-Node-REST)
+Fuel REST Client (for Node.js) [![Build Status](https://travis-ci.org/salesforcefuel/FuelSDK-Node-REST.svg)](https://travis-ci.org/salesforcefuel/FuelSDK-Node-REST)
 =============
 
-This library allows users access to ExactTarget's REST API at a low level.
+**This repo used to be located at https://github.com/exacttarget/Fuel-Node-REST**
+
+This library allows users access to the Salesforce Marketing Cloud (formerly ExactTarget) REST API at a low level.
 
 ```
 npm install fuel-rest --save
@@ -130,7 +132,7 @@ We welcome all contributions and issues! There's only one way to make this bette
     * initial module
     * initial unit tests
 
-[1]: https://github.com/ExactTarget/Fuel-Node-Auth#initialization
+[1]: https://github.com/salesforcefuel/FuelSDK-Node-Auth/wiki/Initialization
 [2]: http://nodejs.org/api/url.html#url_url_resolve_from_to
 [3]: https://github.com/mikeal/request#requestoptions-callback
-[4]: https://github.com/ExactTarget/Fuel-Node-Auth#api
+[4]: https://github.com/salesforcefuel/FuelSDK-Node-Auth/wiki/getAccessToken
