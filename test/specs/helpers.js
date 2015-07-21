@@ -33,8 +33,6 @@ var url             = require('url');
 describe('helpers', function() {
 	'use strict';
 
-	var invalidTypeMsg = 'invalid response type';
-
 	describe('isValid401', function() {
 		it('should return true if 401 and token failure', function() {
 			var res;
@@ -124,52 +122,6 @@ describe('helpers', function() {
 		it('should not resolve if no URI is passed', function() {
 			helpers.resolveUri(origin, null);
 			expect(resolveSpy.calledOnce).to.be.false;
-		});
-	});
-
-	describe('cbRespond', function() {
-		var options;
-
-		beforeEach(function() {
-			options = {
-				type: 'error'
-				, data: {
-					test: true
-				}
-				, cb: function() {}
-			};
-		});
-
-		it('should return if no callback', function() {
-			var promiseSpy = sinon.stub(options, 'cb');
-
-			helpers.cbRespond(options.type, options.data, null);
-			helpers.cbRespond(options.type, options.data, 'test');
-			helpers.cbRespond(options.type, options.data, options.cb);
-
-			expect(promiseSpy.callCount).to.equal(1);
-		});
-
-		it('should use callbacks for success if applicable', function() {
-			var cbSpy = sinon.spy(options, 'cb');
-
-			options.type = 'response';
-			helpers.cbRespond(options.type, options.data, options.cb);
-			expect(cbSpy.calledWith(null, options.data)).to.be.true;
-		});
-
-		it('should use callbacks for errors if applicable', function() {
-			var cbSpy = sinon.spy(options, 'cb');
-
-			helpers.cbRespond(options.type, options.data, options.cb);
-			expect(cbSpy.calledWith(options.data, null)).to.be.true;
-		});
-
-		it('should return error if invalid type is passed', function() {
-			var cbSpy = sinon.spy(options, 'cb');
-
-			helpers.cbRespond('invalid', options.data, options.cb);
-			expect(cbSpy.calledWith(invalidTypeMsg, null)).to.be.true;
 		});
 	});
 });
