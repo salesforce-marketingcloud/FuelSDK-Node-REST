@@ -1,4 +1,4 @@
-Fuel REST Client (for Node.js) [![Build Status](https://travis-ci.org/salesforcefuel/FuelSDK-Node-REST.svg)](https://travis-ci.org/salesforcefuel/FuelSDK-Node-REST)
+Fuel REST Client (for Node.js) [![Build Status](https://travis-ci.org/salesforce-marketingcloud/FuelSDK-Node-REST.svg?branch=master)](https://travis-ci.org/salesforce-marketingcloud/FuelSDK-Node-REST)
 =============
 
 **This repo used to be located at https://github.com/exacttarget/Fuel-Node-REST**
