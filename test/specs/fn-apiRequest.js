@@ -256,4 +256,34 @@ describe('apiRequest method', function() {
 			done();
 		});
 	});
+
+	describe('invalidating token', function() {
+		it('should tell auth client to invalide it\'s token', function(done) {
+			var invalidateSpy = sinon.stub(FuelAuth.prototype, 'invalidateToken');
+			var requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
+			var RestClient;
+
+			sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
+				callback(null, { accessToken: 'testing', expiresIn: 3600 });
+			});
+
+			RestClient = new FuelRest(initOptions);
+
+			requestOptions.uri   = routes.invalidToken;
+			requestOptions.retry = true;
+			requestOptions.auth  = {
+				force: true
+			};
+
+			RestClient.apiRequest(requestOptions, function() {
+				// error should be passed, and data should be null
+				expect(invalidateSpy.callCount).to.equal(1);
+
+				FuelRest.prototype.apiRequest.restore();
+				FuelAuth.prototype.getAccessToken.restore();
+				// finish async test
+				done();
+			}, true);
+		});
+	});
 });
