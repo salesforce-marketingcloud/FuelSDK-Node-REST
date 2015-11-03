@@ -29,7 +29,6 @@ var FuelAuth   = require('fuel-auth');
 var FuelRest   = require('../../lib/fuel-rest');
 var mockServer = require('../mock-server');
 var port       = 4550;
-var Promiser   = (typeof Promise === 'undefined') ? require('bluebird') : Promise;
 var sinon      = require('sinon');
 var routes     = require('../config').routes;
 
@@ -168,15 +167,11 @@ describe('apiRequest method', function() {
 		var RestClient;
 
 		// stubbing response from auth client with no access token
-		sinon.stub(FuelAuth.prototype, 'getAccessToken', function() {
-			return new Promiser(function(resolve) {
-				// fuel auth only rejects if there was an error returned from request
-				// not if the API returned an error code other than 200
-				resolve({
-					documentation: "https://code.docs.exacttarget.com/rest/errors/404"
-					, errorcode: 404
-					, message: "Not Found"
-				});
+		sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
+			callback(null, {
+				documentation: "https://code.docs.exacttarget.com/rest/errors/404"
+				, errorcode: 404
+				, message: "Not Found"
 			});
 		});
 
@@ -186,7 +181,7 @@ describe('apiRequest method', function() {
 			// error should be passed, and data should be null
 			expect(!!err).to.be.true;
 			expect(err.message).to.equal('No access token');
-			expect(err.res).to.be.a('object');
+			expect(err.res).to.be.an('object');
 			expect(data).to.be.null;
 
 			// restoring stubbed function
@@ -201,10 +196,8 @@ describe('apiRequest method', function() {
 		var RestClient;
 
 		// stubbing response from auth client with no access token
-		sinon.stub(FuelAuth.prototype, '_requestToken', function() {
-			return new Promiser(function(resolve, reject) {
-				reject(new Error('error from auth client'));
-			});
+		sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
+			callback(new Error('error from auth client'), null);
 		});
 
 		RestClient = new FuelRest(initOptions);
@@ -216,7 +209,7 @@ describe('apiRequest method', function() {
 			expect(data).to.be.null;
 
 			// restoring stubbed function
-			FuelAuth.prototype._requestToken.restore();
+			FuelAuth.prototype.getAccessToken.restore();
 
 			// finish async test
 			done();
@@ -229,10 +222,8 @@ describe('apiRequest method', function() {
 
 		requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
 
-		sinon.stub(FuelAuth.prototype, '_requestToken', function() {
-			return new Promiser(function(resolve) {
-				resolve({ accessToken: 'testing', expiresIn: 3600 });
-			});
+		sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
+			callback(null, { accessToken: 'testing', expiresIn: 3600 });
 		});
 
 		RestClient = new FuelRest(initOptions);
@@ -248,7 +239,7 @@ describe('apiRequest method', function() {
 			expect(requestSpy.calledTwice).to.be.true;
 
 			FuelRest.prototype.apiRequest.restore();
-			FuelAuth.prototype._requestToken.restore();
+			FuelAuth.prototype.getAccessToken.restore();
 			// finish async test
 			done();
 		}, true);

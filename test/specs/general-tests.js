@@ -23,14 +23,14 @@
 * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 * POSSIBILITY OF SUCH DAMAGE.
 */
+'use strict';
 
 var expect   = require('chai').expect;
-var FuelRest = require('../../lib/fuel-rest');
 var FuelAuth = require('fuel-auth');
+var FuelRest = require('../../lib/fuel-rest');
+var sinon    = require('sinon');
 
 describe('General Tests', function() {
-	'use strict';
-
 	var options;
 
 	beforeEach(function() {
@@ -121,5 +121,36 @@ describe('General Tests', function() {
 
 	it('should have delete on prototype', function() {
 		expect(FuelRest.prototype.delete).to.be.a('function');
+	});
+
+	describe('promise integration', function(done) {
+		it('should allow for use of promises', function() {
+			var RestClient = new FuelRest(options);
+
+			sinon.stub(RestClient, '_processRequest', function(options, callback) {
+				callback(null, { data: true });
+			});
+
+			RestClient
+				.apiRequest({})
+				.then(function(res) {
+					expect(res.data).to.be.true;
+					done();
+				});
+		});
+
+		it('should not allow for use of callbacks and promises together', function() {
+			var error      = null;
+			var RestClient = new FuelRest(options);
+
+			try {
+				RestClient
+					.apiRequest({}, function() {})
+					.then(function() {});
+			} catch(err) {
+				error = err;
+			}
+			expect(error).not.to.be.null;
+		});
 	});
 });
