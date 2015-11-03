@@ -19,14 +19,15 @@
     "grunt-bump": "~0.3.0",
     "grunt-contrib-jshint": "~0.11.0",
     "grunt-jscs": "~1.8.0",
+    "lodash": "~3.10.1",
     "mocha": "~2.2.1",
     "sinon": "~1.13.0"
   },
   "dependencies": {
     "bluebird": "~3.0.5",
     "fuel-auth": "~2.1.0",
-    "lodash.clone": "^3.0.3",
-    "lodash.isplainobject": "^3.2.0",
+    "lodash.clone": "~3.0.3",
+    "lodash.isplainobject": "~3.2.0",
     "lodash.merge": "~3.3.2",
     "request": "~2.65.0"
   }
