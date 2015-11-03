@@ -260,7 +260,6 @@ describe('apiRequest method', function() {
 	describe('invalidating token', function() {
 		it('should tell auth client to invalide it\'s token', function(done) {
 			var invalidateSpy = sinon.stub(FuelAuth.prototype, 'invalidateToken');
-			var requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
 			var RestClient;
 
 			sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
@@ -276,11 +275,11 @@ describe('apiRequest method', function() {
 			};
 
 			RestClient.apiRequest(requestOptions, function() {
-				// error should be passed, and data should be null
 				expect(invalidateSpy.callCount).to.equal(1);
 
-				FuelRest.prototype.apiRequest.restore();
 				FuelAuth.prototype.getAccessToken.restore();
+				FuelAuth.prototype.invalidateToken.restore();
+
 				// finish async test
 				done();
 			}, true);
