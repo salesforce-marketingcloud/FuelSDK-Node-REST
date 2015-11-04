@@ -245,7 +245,7 @@ describe('apiRequest method', function() {
 		}, true);
 	});
 
-	it('should skip retry when Authorization header is provided request 401s', function(done) {
+	it('should skip retry when Authorization header is provided and request 401s', function(done) {
 		var requestSpy;
 		var RestClient;
 
@@ -286,6 +286,35 @@ describe('apiRequest method', function() {
 
 			// finish async test
 			done();
+		});
+	});
+
+	describe('invalidating token', function() {
+		it('should tell auth client to invalide it\'s token', function(done) {
+			var invalidateSpy = sinon.stub(FuelAuth.prototype, 'invalidateToken');
+			var RestClient;
+
+			sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
+				callback(null, { accessToken: 'testing', expiresIn: 3600 });
+			});
+
+			RestClient = new FuelRest(initOptions);
+
+			requestOptions.uri   = routes.invalidToken;
+			requestOptions.retry = true;
+			requestOptions.auth  = {
+				force: true
+			};
+
+			RestClient.apiRequest(requestOptions, function() {
+				expect(invalidateSpy.callCount).to.equal(1);
+
+				FuelAuth.prototype.getAccessToken.restore();
+				FuelAuth.prototype.invalidateToken.restore();
+
+				// finish async test
+				done();
+			}, true);
 		});
 	});
 });
