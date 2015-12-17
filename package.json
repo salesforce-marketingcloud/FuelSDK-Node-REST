@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "bluebird": "~3.0.5",
-    "fuel-auth": "~2.1.0",
+    "fuel-auth": "~2.1.1",
     "lodash.clone": "~3.0.3",
     "lodash.isplainobject": "~3.2.0",
     "lodash.merge": "~3.3.2",
