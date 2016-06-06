@@ -12,6 +12,9 @@ var FuelAuth = require('fuel-auth');
 var FuelRest = require('../../lib/fuel-rest');
 var sinon    = require('sinon');
 
+// this only done for linting reasons. No difference between FuelAuth
+var nonConstructorFuelRest = require('../../lib/fuel-rest');
+
 describe('General Tests', function() {
 	var options;
 
@@ -26,6 +29,23 @@ describe('General Tests', function() {
 
 	it('should be a constructor', function() {
 		expect(FuelRest).to.be.a('function');
+	});
+
+	it('should not need to use "new" when instantiating', function() {
+		// Arrange
+		var options = {
+			auth: {
+				clientId: '<test>'
+				, clientSecret: '<test>'
+			}
+			, origin: '<api origin>'
+		};
+
+		// Act
+		var client = nonConstructorFuelRest(options);
+
+		// Assert
+		expect(client.origin).to.equal(options.origin);
 	});
 
 	it('should require auth options', function() {
