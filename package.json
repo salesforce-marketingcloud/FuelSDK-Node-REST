@@ -1,6 +1,6 @@
 {
   "name": "fuel-rest",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Node library for performing REST API calls to Salesforce Marketing Cloud (formerly ExactTarget).",
   "main": "./lib/fuel-rest.js",
   "scripts": {
