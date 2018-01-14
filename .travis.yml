@@ -1,14 +1,11 @@
 language: node_js
 node_js:
-  - "0.8"
-  - "0.10"
-  - "0.12"
   - "4"
   - "5"
   - "6"
+  - "7"
+  - "8"
   - "stable"
-  - "iojs"
 sudo: false
-before_install: "test $TRAVIS_NODE_VERSION = '0.8' && npm install -g npm@1.2.8000 || true"
 before_script:
   - npm install -g grunt-cli
