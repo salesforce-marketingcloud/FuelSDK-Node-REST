@@ -7,13 +7,13 @@
 
 module.exports = {
 	routes: {
-		get: '/get/test'
-		, post: '/post/test'
-		, put: '/update/test'
-		, delete: '/delete/test'
-		, queryGet: '/get/test?test=1'
-		, notJson: '/not/json/response'
-		, patch: '/patch'
-		, invalidToken: '/invalid/token'
+		get: '/get/test',
+		post: '/post/test',
+		put: '/update/test',
+		delete: '/delete/test',
+		queryGet: '/get/test?test=1',
+		notJson: '/not/json/response',
+		patch: '/patch',
+		invalidToken: '/invalid/token'
 	}
 };

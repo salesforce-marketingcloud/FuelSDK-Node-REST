@@ -5,15 +5,15 @@
  * For full license text, see LICENSE.txt file in the repo root  or https://opensource.org/licenses/BSD-3-Clause
  */
 
-var expect     = require('chai').expect;
-var FuelAuth   = require('fuel-auth');
-var FuelRest   = require('../../lib/fuel-rest');
-var mockServer = require('../mock-server');
-var port       = 4550;
-var sinon      = require('sinon');
-var routes     = require('../config').routes;
+const expect = require('chai').expect;
+const FuelAuth = require('fuel-auth');
+const FuelRest = require('../../lib/fuel-rest');
+const mockServer = require('../mock-server');
+const port = 4550;
+const sinon = require('sinon');
+const routes = require('../config').routes;
 
-var localhost = 'http://127.0.0.1:' + port;
+const localhost = `http://127.0.0.1:${port}`;
 
 describe('apiRequest method', function() {
 	'use strict';
@@ -24,10 +24,10 @@ describe('apiRequest method', function() {
 
 	var initOptions = {
 		auth: {
-			clientId: 'testing'
-			, clientSecret: 'testing'
-		}
-		, restEndpoint: localhost
+			clientId: 'testing',
+			clientSecret: 'testing'
+		},
+		restEndpoint: localhost
 	};
 
 	before(function() {
@@ -36,7 +36,7 @@ describe('apiRequest method', function() {
 
 		// faking auth
 		RestClient.AuthClient.accessToken = 'testForRest';
-		RestClient.AuthClient.expiration  = 111111111111;
+		RestClient.AuthClient.expiration = 111111111111;
 
 		// setting up server
 		server = mockServer(port);
@@ -48,15 +48,15 @@ describe('apiRequest method', function() {
 
 	beforeEach(function() {
 		requestOptions = {
-			method: 'GET'
-			, uri: routes.get
+			method: 'GET',
+			uri: routes.get
 		};
 	});
 
 	it('should throw an error when no options are passed', function() {
 		try {
 			RestClient.apiRequest(null, function() {});
-		} catch(err) {
+		} catch (err) {
 			expect(err.name).to.equal('TypeError');
 			expect(err.message).to.equal('options argument is required');
 		}
@@ -88,7 +88,7 @@ describe('apiRequest method', function() {
 
 	it('should add extra options to request module - testing qs', function(done) {
 		requestOptions.qs = {
-			'test': 1
+			test: 1
 		};
 
 		RestClient.apiRequest(requestOptions, function(err, data) {
@@ -130,8 +130,8 @@ describe('apiRequest method', function() {
 
 	it('should error when request module errors', function(done) {
 		var options = {
-			method: 'TEST'
-			, uri: routes.notJson
+			method: 'TEST',
+			uri: routes.notJson
 		};
 
 		RestClient.apiRequest(options, function(err, data) {
@@ -150,9 +150,9 @@ describe('apiRequest method', function() {
 		// stubbing response from auth client with no access token
 		sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
 			callback(null, {
-				documentation: "https://code.docs.exacttarget.com/rest/errors/404"
-				, errorcode: 404
-				, message: "Not Found"
+				documentation: 'https://code.docs.exacttarget.com/rest/errors/404',
+				errorcode: 404,
+				message: 'Not Found'
 			});
 		});
 
@@ -209,21 +209,25 @@ describe('apiRequest method', function() {
 
 		RestClient = new FuelRest(initOptions);
 
-		requestOptions.uri   = routes.invalidToken;
+		requestOptions.uri = routes.invalidToken;
 		requestOptions.retry = true;
-		requestOptions.auth  = {
+		requestOptions.auth = {
 			force: true
 		};
 
-		RestClient.apiRequest(requestOptions, function() {
-			// error should be passed, and data should be null
-			expect(requestSpy.calledTwice).to.be.true;
+		RestClient.apiRequest(
+			requestOptions,
+			function() {
+				// error should be passed, and data should be null
+				expect(requestSpy.calledTwice).to.be.true;
 
-			FuelRest.prototype.apiRequest.restore();
-			FuelAuth.prototype.getAccessToken.restore();
-			// finish async test
-			done();
-		}, true);
+				FuelRest.prototype.apiRequest.restore();
+				FuelAuth.prototype.getAccessToken.restore();
+				// finish async test
+				done();
+			},
+			true
+		);
 	});
 
 	it('should skip retry when Authorization header is provided and request 401s', function(done) {
@@ -238,24 +242,28 @@ describe('apiRequest method', function() {
 
 		RestClient = new FuelRest(initOptions);
 
-		requestOptions.uri   = routes.invalidToken;
+		requestOptions.uri = routes.invalidToken;
 		requestOptions.retry = true;
-		requestOptions.auth  = {
+		requestOptions.auth = {
 			force: true
 		};
 		requestOptions.headers = {
 			Authorization: 'Bearer SomeToken'
 		};
 
-		RestClient.apiRequest(requestOptions, function() {
-			// error should be passed, and data should be null
-			expect(requestSpy.calledTwice).to.be.false;
+		RestClient.apiRequest(
+			requestOptions,
+			function() {
+				// error should be passed, and data should be null
+				expect(requestSpy.calledTwice).to.be.false;
 
-			FuelRest.prototype.apiRequest.restore();
-			FuelAuth.prototype.getAccessToken.restore();
-			// finish async test
-			done();
-		}, true);
+				FuelRest.prototype.apiRequest.restore();
+				FuelAuth.prototype.getAccessToken.restore();
+				// finish async test
+				done();
+			},
+			true
+		);
 	});
 
 	it('should use a full URI if provided', function(done) {
@@ -271,7 +279,7 @@ describe('apiRequest method', function() {
 	});
 
 	describe('invalidating token', function() {
-		it('should tell auth client to invalide it\'s token', function(done) {
+		it("should tell auth client to invalide it's token", function(done) {
 			var invalidateSpy = sinon.stub(FuelAuth.prototype, 'invalidateToken');
 			var RestClient;
 
@@ -281,21 +289,25 @@ describe('apiRequest method', function() {
 
 			RestClient = new FuelRest(initOptions);
 
-			requestOptions.uri   = routes.invalidToken;
+			requestOptions.uri = routes.invalidToken;
 			requestOptions.retry = true;
-			requestOptions.auth  = {
+			requestOptions.auth = {
 				force: true
 			};
 
-			RestClient.apiRequest(requestOptions, function() {
-				expect(invalidateSpy.callCount).to.equal(1);
+			RestClient.apiRequest(
+				requestOptions,
+				function() {
+					expect(invalidateSpy.callCount).to.equal(1);
 
-				FuelAuth.prototype.getAccessToken.restore();
-				FuelAuth.prototype.invalidateToken.restore();
+					FuelAuth.prototype.getAccessToken.restore();
+					FuelAuth.prototype.invalidateToken.restore();
 
-				// finish async test
-				done();
-			}, true);
+					// finish async test
+					done();
+				},
+				true
+			);
 		});
 	});
 });

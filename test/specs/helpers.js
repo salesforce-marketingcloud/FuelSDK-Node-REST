@@ -7,22 +7,21 @@
 
 'use strict';
 
-var expect          = require('chai').expect;
-var sinon           = require('sinon');
-var helpers         = require('../../lib/helpers');
-var sampleResponses = require('../sample-responses');
-var url             = require('url');
+const expect = require('chai').expect;
+const sinon = require('sinon');
+const helpers = require('../../lib/helpers');
+const sampleResponses = require('../sample-responses');
+const url = require('url');
 
 describe('helpers', function() {
-
 	describe('isValid401', function() {
 		it('should return true if 401 and token failure', function() {
 			var res;
 			var result;
 
 			res = {
-				statusCode: 401
-				, headers: {
+				statusCode: 401,
+				headers: {
 					'www-authenticate': sampleResponses.invalidToken
 				}
 			};
@@ -36,8 +35,8 @@ describe('helpers', function() {
 			var result;
 
 			res = {
-				statusCode: 401
-				, headers: {}
+				statusCode: 401,
+				headers: {}
 			};
 
 			result = helpers.isValid401(res);
@@ -49,8 +48,8 @@ describe('helpers', function() {
 			var result;
 
 			res = {
-				statusCode: 200
-				, headers: {}
+				statusCode: 200,
+				headers: {}
 			};
 
 			result = helpers.isValid401(res);
@@ -76,9 +75,9 @@ describe('helpers', function() {
 		var uri;
 
 		beforeEach(function() {
-			origin     = 'http://test.com';
+			origin = 'http://test.com';
 			resolveSpy = sinon.stub(url, 'resolve');
-			uri        = 'path/to/test';
+			uri = 'path/to/test';
 		});
 
 		afterEach(function() {

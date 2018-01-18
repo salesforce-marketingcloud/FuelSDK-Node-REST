@@ -7,13 +7,10 @@
 
 'use strict';
 
-var expect   = require('chai').expect;
-var FuelAuth = require('fuel-auth');
-var FuelRest = require('../../lib/fuel-rest');
-var sinon    = require('sinon');
-
-// this only done for linting reasons. No difference between FuelAuth
-var nonConstructorFuelRest = require('../../lib/fuel-rest');
+const expect = require('chai').expect;
+const FuelAuth = require('fuel-auth');
+const FuelRest = require('../../lib/fuel-rest');
+const sinon = require('sinon');
 
 describe('General Tests', function() {
 	var options;
@@ -21,8 +18,8 @@ describe('General Tests', function() {
 	beforeEach(function() {
 		options = {
 			auth: {
-				clientId: 'testing'
-				, clientSecret: 'testing'
+				clientId: 'testing',
+				clientSecret: 'testing'
 			}
 		};
 	});
@@ -31,29 +28,12 @@ describe('General Tests', function() {
 		expect(FuelRest).to.be.a('function');
 	});
 
-	it('should not need to use "new" when instantiating', function() {
-		// Arrange
-		var options = {
-			auth: {
-				clientId: '<test>'
-				, clientSecret: '<test>'
-			}
-			, origin: '<api origin>'
-		};
-
-		// Act
-		var client = nonConstructorFuelRest(options);
-
-		// Assert
-		expect(client.origin).to.equal(options.origin);
-	});
-
 	it('should require auth options', function() {
 		var RestClient;
 
 		try {
 			RestClient = new FuelRest();
-		} catch(err) {
+		} catch (err) {
 			expect(err.message).to.equal('clientId or clientSecret is missing or invalid');
 		}
 
@@ -96,7 +76,7 @@ describe('General Tests', function() {
 		var RestClient;
 
 		options.headers = {
-			'test': 1
+			test: 1
 		};
 
 		// testing default initialization
@@ -133,23 +113,19 @@ describe('General Tests', function() {
 				callback(null, { data: true });
 			});
 
-			RestClient
-				.apiRequest({})
-				.then(function(res) {
-					expect(res.data).to.be.true;
-					done();
-				});
+			RestClient.apiRequest({}).then(function(res) {
+				expect(res.data).to.be.true;
+				done();
+			});
 		});
 
 		it('should not allow for use of callbacks and promises together', function() {
-			var error      = null;
+			var error = null;
 			var RestClient = new FuelRest(options);
 
 			try {
-				RestClient
-					.apiRequest({}, function() {})
-					.then(function() {});
-			} catch(err) {
+				RestClient.apiRequest({}, function() {}).then(function() {});
+			} catch (err) {
 				error = err;
 			}
 			expect(error).not.to.be.null;
