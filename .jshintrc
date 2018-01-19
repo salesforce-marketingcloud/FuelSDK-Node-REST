@@ -16,6 +16,7 @@
   "shadow": false,
   "strict": true,
   "unused": true,
+  "esversion": 6,
   "globals": {
     "Promise": true,
     "after": true,

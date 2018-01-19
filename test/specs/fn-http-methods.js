@@ -5,13 +5,14 @@
  * For full license text, see LICENSE.txt file in the repo root  or https://opensource.org/licenses/BSD-3-Clause
  */
 
-var expect     = require('chai').expect;
-var sinon      = require('sinon');
-var mockServer = require('../mock-server');
-var FuelRest   = require('../../lib/fuel-rest');
-var port       = 4550;
-var localhost  = 'http://127.0.0.1:' + port;
-var routes     = require('../config').routes;
+const expect = require('chai').expect;
+const sinon = require('sinon');
+const mockServer = require('../mock-server');
+const FuelRest = require('../../lib/fuel-rest');
+const port = 4550;
+const routes = require('../config').routes;
+
+const localhost = `http://127.0.0.1:${port}`;
 
 describe('HTTP methods', function() {
 	'use strict';
@@ -31,10 +32,10 @@ describe('HTTP methods', function() {
 	beforeEach(function() {
 		initOptions = {
 			auth: {
-				clientId: 'testing'
-				, clientSecret: 'testing'
-			}
-			, restEndpoint: localhost
+				clientId: 'testing',
+				clientSecret: 'testing'
+			},
+			restEndpoint: localhost
 		};
 
 		requestOptions = {
@@ -50,11 +51,11 @@ describe('HTTP methods', function() {
 			var RestClient;
 
 			apiRequestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
-			RestClient    = new FuelRest(initOptions);
+			RestClient = new FuelRest(initOptions);
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
-			RestClient.AuthClient.expiration  = 111111111111;
+			RestClient.AuthClient.expiration = 111111111111;
 
 			RestClient.get({ uri: routes.get }, function(err, data) {
 				// need to make sure we called apiRequest method
@@ -74,13 +75,13 @@ describe('HTTP methods', function() {
 			var apiRequestSpy;
 			var RestClient;
 
-			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
-			RestClient         = new FuelRest(initOptions);
+			apiRequestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
+			RestClient = new FuelRest(initOptions);
 			requestOptions.uri = routes.post;
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
-			RestClient.AuthClient.expiration  = 111111111111;
+			RestClient.AuthClient.expiration = 111111111111;
 
 			// doing post
 			RestClient.post(requestOptions, function(err, data) {
@@ -93,7 +94,6 @@ describe('HTTP methods', function() {
 				FuelRest.prototype.apiRequest.restore(); // restoring function
 				done();
 			});
-
 		});
 	});
 
@@ -102,13 +102,13 @@ describe('HTTP methods', function() {
 			var apiRequestSpy;
 			var RestClient;
 
-			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
-			RestClient         = new FuelRest(initOptions);
+			apiRequestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
+			RestClient = new FuelRest(initOptions);
 			requestOptions.uri = routes.put;
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
-			RestClient.AuthClient.expiration  = 111111111111;
+			RestClient.AuthClient.expiration = 111111111111;
 
 			// doing post
 			RestClient.put(requestOptions, function(err, data) {
@@ -129,13 +129,13 @@ describe('HTTP methods', function() {
 			var apiRequestSpy;
 			var RestClient;
 
-			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
-			RestClient         = new FuelRest(initOptions);
+			apiRequestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
+			RestClient = new FuelRest(initOptions);
 			requestOptions.uri = routes.patch;
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
-			RestClient.AuthClient.expiration  = 111111111111;
+			RestClient.AuthClient.expiration = 111111111111;
 
 			// doing post
 			RestClient.patch(requestOptions, function(err, data) {
@@ -156,13 +156,13 @@ describe('HTTP methods', function() {
 			var apiRequestSpy;
 			var RestClient;
 
-			apiRequestSpy      = sinon.spy(FuelRest.prototype, 'apiRequest');
-			RestClient         = new FuelRest(initOptions);
+			apiRequestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
+			RestClient = new FuelRest(initOptions);
 			requestOptions.uri = routes.delete;
 
 			// faking auth
 			RestClient.AuthClient.accessToken = 'testForRest';
-			RestClient.AuthClient.expiration  = 111111111111;
+			RestClient.AuthClient.expiration = 111111111111;
 
 			// doing post
 			RestClient.delete(requestOptions, function(err, data) {
@@ -177,5 +177,4 @@ describe('HTTP methods', function() {
 			});
 		});
 	});
-
 });
