@@ -7,6 +7,8 @@ This library allows users access to the Salesforce Marketing Cloud (formerly Exa
 
 ```
 npm install fuel-rest --save
+
+yarn add fuel-rest
 ```
 
 ## Initialization
@@ -44,56 +46,51 @@ npm install fuel-rest --save
 ## Setting up the client
 
 ```js
-var FuelRest = require('fuel-rest');
-var options  = {
-    auth: {
-        // options you want passed when Fuel Auth is initialized
-        clientId: 'clientId'
-        , clientSecret: 'clientSecret'
-    }
-    , origin: 'https://alternate.rest.endpoint.com' // default --> https://www.exacttargetapis.com
+const FuelRest = require('fuel-rest');
+const options = {
+	auth: {
+		// options you want passed when Fuel Auth is initialized
+		clientId: 'clientId',
+		clientSecret: 'clientSecret'
+	},
+	origin: 'https://alternate.rest.endpoint.com' // default --> https://www.exacttargetapis.com
 };
 
-var RestClient = new FuelRest(options);
+const RestClient = new FuelRest(options);
 ```
 
 
 ## Examples
 
 ```js
-var options = {
-    uri: '/platform/v1/endpoints',
-    headers: {}
-    // other request options
+const options = {
+	uri: '/platform/v1/endpoints',
+	headers: {}
+	// other request options
 };
 
 // CANNOT USE BOTH CALLBACKS AND PROMISES TOGETHER
-RestClient.get(options, function(err, response) {
-    if(err) {
-        // error here
-        console.log(err);
-    }
+RestClient.get(options, (err, response) => {
+	if (err) {
+		// error here
+		console.log(err);
+	}
 
-    // will be delivered with 200, 400, 401, 500, etc status codes
-    // response.body === payload from response
-    // response.res === full response from request client
-    console.log(response);
+	// will be delivered with 200, 400, 401, 500, etc status codes
+	// response.body === payload from response
+	// response.res === full response from request client
+	console.log(response);
 });
 
 // or with promises
-RestClient
-    .get(options)
-    .then(function(response) {
-        // will be delivered with 200, 400, 401, 500, etc status codes
-        // response.body === payload from response
-        // response.res === full response from request client
-        console.log(response);
-    })
-    .catch(function(err) {
-        // error here
-        console.log(err);
-    });
-});
+RestClient.get(options)
+	.then(response => {
+		// will be delivered with 200, 400, 401, 500, etc status codes
+		// response.body === payload from response
+		// response.res === full response from request client
+		console.log(response);
+	})
+	.catch(err => console.log(err));
 ```
 
 ## Contributors
@@ -105,6 +102,10 @@ RestClient
 ## Contributing
 
 We welcome all contributions and issues! There's only one way to make this better, and that's by using it. If you would like to contribute, please checkout our [guidelines][5]!
+
+## Supported Node Versions
+
+We follow the [Node.js Release Schedule](https://github.com/nodejs/Release#release-schedule). When the current date is past the version's "Maintenance LTS End" it will no longer be supported by this library. A major release on this module will be published when this occurs. 
 
 ## ChangeLog
 
