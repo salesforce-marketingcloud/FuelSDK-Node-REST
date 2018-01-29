@@ -9,20 +9,20 @@ const expect = require('chai').expect;
 const FuelAuth = require('fuel-auth');
 const FuelRest = require('../../lib/fuel-rest');
 const mockServer = require('../mock-server');
-const port = 4550;
-const sinon = require('sinon');
 const routes = require('../config').routes;
+const sinon = require('sinon');
 
+const port = 4550;
 const localhost = `http://127.0.0.1:${port}`;
 
 describe('apiRequest method', function() {
 	'use strict';
 
-	var RestClient;
-	var requestOptions;
-	var server;
+	let RestClient;
+	let requestOptions;
+	let server;
 
-	var initOptions = {
+	let initOptions = {
 		auth: {
 			clientId: 'testing',
 			clientSecret: 'testing'
@@ -30,7 +30,7 @@ describe('apiRequest method', function() {
 		restEndpoint: localhost
 	};
 
-	before(function() {
+	before(() => {
 		// setting up rest client for all tests to use
 		RestClient = new FuelRest(initOptions);
 
@@ -42,28 +42,26 @@ describe('apiRequest method', function() {
 		server = mockServer(port);
 	});
 
-	after(function() {
-		server.close();
-	});
+	after(() => server.close());
 
-	beforeEach(function() {
+	beforeEach(() => {
 		requestOptions = {
 			method: 'GET',
 			uri: routes.get
 		};
 	});
 
-	it('should throw an error when no options are passed', function() {
+	it('should throw an error when no options are passed', () => {
 		try {
-			RestClient.apiRequest(null, function() {});
+			RestClient.apiRequest(null, () => {});
 		} catch (err) {
 			expect(err.name).to.equal('TypeError');
 			expect(err.message).to.equal('options argument is required');
 		}
 	});
 
-	it('should make a requset to the API', function(done) {
-		RestClient.apiRequest(requestOptions, function(err, data) {
+	it('should make a requset to the API', done => {
+		RestClient.apiRequest(requestOptions, (err, data) => {
 			// making sure original request was GET
 			expect(data.res.req.method).to.equal('GET');
 
@@ -72,12 +70,12 @@ describe('apiRequest method', function() {
 		});
 	});
 
-	it('should add extra headers to default headers', function(done) {
+	it('should add extra headers to default headers', done => {
 		requestOptions.headers = {
 			'X-Test-Header': 'testing value'
 		};
 
-		RestClient.apiRequest(requestOptions, function(err, data) {
+		RestClient.apiRequest(requestOptions, (err, data) => {
 			// making sure custom header was sent in request
 			expect(data.res.req._headers['x-test-header']).to.equal(requestOptions.headers['X-Test-Header']);
 
@@ -86,12 +84,12 @@ describe('apiRequest method', function() {
 		});
 	});
 
-	it('should add extra options to request module - testing qs', function(done) {
+	it('should add extra options to request module - testing qs', done => {
 		requestOptions.qs = {
 			test: 1
 		};
 
-		RestClient.apiRequest(requestOptions, function(err, data) {
+		RestClient.apiRequest(requestOptions, (err, data) => {
 			// checking to make sure path on request was correct
 			expect(data.res.req.path).to.equal('/get/test?test=1');
 
@@ -100,12 +98,12 @@ describe('apiRequest method', function() {
 		});
 	});
 
-	it('should override Authorization header if passed', function(done) {
+	it('should override Authorization header if passed', done => {
 		requestOptions.headers = {
 			Authorization: 'Bearer diffTestForRest'
 		};
 
-		RestClient.apiRequest(requestOptions, function(err, data) {
+		RestClient.apiRequest(requestOptions, (err, data) => {
 			// making sure different auth header was sent in request
 			expect(data.res.req._headers.authorization).to.equal(requestOptions.headers.Authorization);
 
@@ -114,10 +112,10 @@ describe('apiRequest method', function() {
 		});
 	});
 
-	it('should return an error when application type returned is not application/json', function(done) {
+	it('should return an error when application type returned is not application/json', done => {
 		requestOptions.uri = routes.notJson;
 
-		RestClient.apiRequest(requestOptions, function(err, data) {
+		RestClient.apiRequest(requestOptions, (err, data) => {
 			// error should be passed, and data should be null
 			expect(!!err).to.be.true;
 			expect(err.message).to.equal('API did not return JSON');
@@ -128,13 +126,13 @@ describe('apiRequest method', function() {
 		});
 	});
 
-	it('should error when request module errors', function(done) {
+	it('should error when request module errors', done => {
 		var options = {
 			method: 'TEST',
 			uri: routes.notJson
 		};
 
-		RestClient.apiRequest(options, function(err, data) {
+		RestClient.apiRequest(options, (err, data) => {
 			// error should be passed, and data should be null
 			expect(!!err).to.be.true;
 			expect(data).to.be.null;
@@ -144,21 +142,23 @@ describe('apiRequest method', function() {
 		});
 	});
 
-	it('should return an error when no accessToken is available', function(done) {
-		var RestClient;
+	it('should return an error when no accessToken is available', done => {
+		let RestClient;
 
 		// stubbing response from auth client with no access token
-		sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
-			callback(null, {
-				documentation: 'https://code.docs.exacttarget.com/rest/errors/404',
-				errorcode: 404,
-				message: 'Not Found'
+		sinon.stub(FuelAuth.prototype, 'getAccessToken', () => {
+			return new Promise(resolve => {
+				resolve({
+					documentation: 'https://code.docs.exacttarget.com/rest/errors/404',
+					errorcode: 404,
+					message: 'Not Found'
+				});
 			});
 		});
 
 		RestClient = new FuelRest(initOptions);
 
-		RestClient.apiRequest(requestOptions, function(err, data) {
+		RestClient.apiRequest(requestOptions, (err, data) => {
 			// error should be passed, and data should be null
 			expect(!!err).to.be.true;
 			expect(err.message).to.equal('No access token');
@@ -173,17 +173,19 @@ describe('apiRequest method', function() {
 		});
 	});
 
-	it('should handle an error from the Auth Client', function(done) {
+	it('should handle an error from the Auth Client', done => {
 		var RestClient;
 
 		// stubbing response from auth client with no access token
-		sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
-			callback(new Error('error from auth client'), null);
+		sinon.stub(FuelAuth.prototype, 'getAccessToken', () => {
+			return new Promise((resolve, reject) => {
+				reject(new Error('error from auth client'));
+			});
 		});
 
 		RestClient = new FuelRest(initOptions);
 
-		RestClient.apiRequest(requestOptions, function(err, data) {
+		RestClient.apiRequest(requestOptions, (err, data) => {
 			// error should be passed, and data should be null
 			expect(!!err).to.be.true;
 			expect(err.message).to.equal('error from auth client');
@@ -197,14 +199,14 @@ describe('apiRequest method', function() {
 		});
 	});
 
-	it('should try request again if 401 stating token is invalid', function(done) {
+	it('should try request again if 401 stating token is invalid', done => {
 		var requestSpy;
 		var RestClient;
 
 		requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
 
-		sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
-			callback(null, { accessToken: 'testing', expiresIn: 3600 });
+		sinon.stub(FuelAuth.prototype, 'getAccessToken', () => {
+			return new Promise(resolve => resolve({ accessToken: 'testing', expiresIn: 3600 }));
 		});
 
 		RestClient = new FuelRest(initOptions);
@@ -217,7 +219,7 @@ describe('apiRequest method', function() {
 
 		RestClient.apiRequest(
 			requestOptions,
-			function() {
+			() => {
 				// error should be passed, and data should be null
 				expect(requestSpy.calledTwice).to.be.true;
 
@@ -230,14 +232,14 @@ describe('apiRequest method', function() {
 		);
 	});
 
-	it('should skip retry when Authorization header is provided and request 401s', function(done) {
+	it('should skip retry when Authorization header is provided and request 401s', done => {
 		var requestSpy;
 		var RestClient;
 
 		requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
 
-		sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
-			callback(null, { accessToken: 'testing', expiresIn: 3600 });
+		sinon.stub(FuelAuth.prototype, 'getAccessToken', () => {
+			return new Promise(resolve => resolve({ accessToken: 'testing', expiresIn: 3600 }));
 		});
 
 		RestClient = new FuelRest(initOptions);
@@ -266,10 +268,10 @@ describe('apiRequest method', function() {
 		);
 	});
 
-	it('should use a full URI if provided', function(done) {
+	it('should use a full URI if provided', done => {
 		requestOptions.uri = localhost + routes.get;
 
-		RestClient.apiRequest(requestOptions, function(err, data) {
+		RestClient.apiRequest(requestOptions, (err, data) => {
 			// making sure original request was GET
 			expect(data.res.req.method).to.equal('GET');
 
@@ -278,13 +280,13 @@ describe('apiRequest method', function() {
 		});
 	});
 
-	describe('invalidating token', function() {
-		it("should tell auth client to invalide it's token", function(done) {
+	describe('invalidating token', () => {
+		it("should tell auth client to invalide it's token", done => {
 			var invalidateSpy = sinon.stub(FuelAuth.prototype, 'invalidateToken');
 			var RestClient;
 
-			sinon.stub(FuelAuth.prototype, 'getAccessToken', function(options, callback) {
-				callback(null, { accessToken: 'testing', expiresIn: 3600 });
+			sinon.stub(FuelAuth.prototype, 'getAccessToken', () => {
+				return new Promise(resolve => resolve({ accessToken: 'testing', expiresIn: 3600 }));
 			});
 
 			RestClient = new FuelRest(initOptions);

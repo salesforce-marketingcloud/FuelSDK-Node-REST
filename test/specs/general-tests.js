@@ -12,10 +12,10 @@ const FuelAuth = require('fuel-auth');
 const FuelRest = require('../../lib/fuel-rest');
 const sinon = require('sinon');
 
-describe('General Tests', function() {
+describe('General Tests', () => {
 	var options;
 
-	beforeEach(function() {
+	beforeEach(() => {
 		options = {
 			auth: {
 				clientId: 'testing',
@@ -24,11 +24,11 @@ describe('General Tests', function() {
 		};
 	});
 
-	it('should be a constructor', function() {
+	it('should be a constructor', () => {
 		expect(FuelRest).to.be.a('function');
 	});
 
-	it('should require auth options', function() {
+	it('should require auth options', () => {
 		var RestClient;
 
 		try {
@@ -43,7 +43,7 @@ describe('General Tests', function() {
 		expect(RestClient.AuthClient instanceof FuelAuth).to.be.true;
 	});
 
-	it('should use already initialized fuel auth client', function() {
+	it('should use already initialized fuel auth client', () => {
 		var AuthClient;
 		var RestClient;
 
@@ -56,7 +56,7 @@ describe('General Tests', function() {
 		expect(RestClient.AuthClient.test).to.be.true;
 	});
 
-	it('should take a custom rest endpoint', function() {
+	it('should take a custom rest endpoint', () => {
 		var RestClient;
 
 		// testing default initialization
@@ -72,7 +72,7 @@ describe('General Tests', function() {
 		expect(RestClient.origin).to.equal('https://www.exacttarget.com');
 	});
 
-	it('should merge module level headers into default headers', function() {
+	it('should merge module level headers into default headers', () => {
 		var RestClient;
 
 		options.headers = {
@@ -85,46 +85,46 @@ describe('General Tests', function() {
 		expect(RestClient.defaultHeaders.test).to.equal(1);
 	});
 
-	it('should have apiRequest on prototype', function() {
+	it('should have apiRequest on prototype', () => {
 		expect(FuelRest.prototype.apiRequest).to.be.a('function');
 	});
 
-	it('should have get on prototype', function() {
+	it('should have get on prototype', () => {
 		expect(FuelRest.prototype.get).to.be.a('function');
 	});
 
-	it('should have post on prototype', function() {
+	it('should have post on prototype', () => {
 		expect(FuelRest.prototype.post).to.be.a('function');
 	});
 
-	it('should have put on prototype', function() {
+	it('should have put on prototype', () => {
 		expect(FuelRest.prototype.put).to.be.a('function');
 	});
 
-	it('should have delete on prototype', function() {
+	it('should have delete on prototype', () => {
 		expect(FuelRest.prototype.delete).to.be.a('function');
 	});
 
-	describe('promise integration', function(done) {
-		it('should allow for use of promises', function() {
+	describe('promise integration', () => {
+		it('should allow for use of promises', done => {
 			var RestClient = new FuelRest(options);
 
-			sinon.stub(RestClient, '_processRequest', function(options, callback) {
+			sinon.stub(RestClient, '_processRequest', (options, callback) => {
 				callback(null, { data: true });
 			});
 
-			RestClient.apiRequest({}).then(function(res) {
+			RestClient.apiRequest({}).then(res => {
 				expect(res.data).to.be.true;
 				done();
 			});
 		});
 
-		it('should not allow for use of callbacks and promises together', function() {
+		it('should not allow for use of callbacks and promises together', () => {
 			var error = null;
 			var RestClient = new FuelRest(options);
 
 			try {
-				RestClient.apiRequest({}, function() {}).then(function() {});
+				RestClient.apiRequest({}, () => {}).then(() => {});
 			} catch (err) {
 				error = err;
 			}
