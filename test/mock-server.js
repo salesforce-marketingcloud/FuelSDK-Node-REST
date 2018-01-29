@@ -11,18 +11,18 @@ const _ = require('lodash');
 const validUrls = require('./config').routes;
 const sampleResponses = require('./sample-responses');
 
-module.exports = function(port) {
+module.exports = port => {
 	'use strict';
 
 	return http
-		.createServer(function(req, res) {
-			var sendResponse = function(res, status, data) {
+		.createServer((req, res) => {
+			const sendResponse = (res, status, data) => {
 				res.statusCode = status;
 				res.end(JSON.stringify(data));
 			};
 
-			var _bodyParser = bodyParser.json();
-			var totalRequests = 0;
+			const _bodyParser = bodyParser.json();
+			let totalRequests = 0;
 
 			res.setHeader('Content-Type', 'application/json');
 
@@ -34,10 +34,10 @@ module.exports = function(port) {
 			}
 
 			_bodyParser(req, res, function(err) {
-				var data = req.body.testingData;
-				var reqMethod = req.method;
-				var reqUrl = req.url;
-				var dataCheck = data === 'test data';
+				const data = req.body.testingData;
+				const reqMethod = req.method;
+				const reqUrl = req.url;
+				const dataCheck = data === 'test data';
 
 				if (err) {
 					throw new Error('problem with bodyParser');

@@ -4,7 +4,8 @@
   "description": "Node library for performing REST API calls to Salesforce Marketing Cloud (formerly ExactTarget).",
   "main": "./lib/fuel-rest.js",
   "scripts": {
-    "test": "node ./node_modules/.bin/gulp ci"
+    "test": "node ./node_modules/.bin/gulp ci",
+    "test:watch": "node ./node_modules/.bin/mocha ./test/specs/**/*.js --reporter=spec --watch"
   },
   "engines": {
     "node": ">= 4"

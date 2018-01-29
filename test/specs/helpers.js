@@ -13,94 +13,82 @@ const helpers = require('../../lib/helpers');
 const sampleResponses = require('../sample-responses');
 const url = require('url');
 
-describe('helpers', function() {
-	describe('isValid401', function() {
-		it('should return true if 401 and token failure', function() {
-			var res;
-			var result;
-
-			res = {
+describe('helpers', () => {
+	describe('isValid401', () => {
+		it('should return true if 401 and token failure', () => {
+			const res = {
 				statusCode: 401,
 				headers: {
 					'www-authenticate': sampleResponses.invalidToken
 				}
 			};
 
-			result = helpers.isValid401(res);
+			const result = helpers.isValid401(res);
 			expect(result).to.be.true;
 		});
 
-		it('should return false if 401 and no token failure', function() {
-			var res;
-			var result;
-
-			res = {
+		it('should return false if 401 and no token failure', () => {
+			const res = {
 				statusCode: 401,
 				headers: {}
 			};
 
-			result = helpers.isValid401(res);
+			const result = helpers.isValid401(res);
 			expect(result).to.be.false;
 		});
 
-		it('should return false if not 401', function() {
-			var res;
-			var result;
-
-			res = {
+		it('should return false if not 401', () => {
+			const res = {
 				statusCode: 200,
 				headers: {}
 			};
 
-			result = helpers.isValid401(res);
+			const result = helpers.isValid401(res);
 			expect(result).to.be.false;
 		});
 
-		it('should return false if no headers passed', function() {
-			var res;
-			var result;
-
-			res = {
+		it('should return false if no headers passed', () => {
+			const res = {
 				statusCode: 401
 			};
 
-			result = helpers.isValid401(res);
+			const result = helpers.isValid401(res);
 			expect(result).to.be.false;
 		});
 	});
 
-	describe('resolveUri', function() {
-		var origin;
-		var resolveSpy;
-		var uri;
+	describe('resolveUri', () => {
+		let origin;
+		let resolveSpy;
+		let uri;
 
-		beforeEach(function() {
+		beforeEach(() => {
 			origin = 'http://test.com';
 			resolveSpy = sinon.stub(url, 'resolve');
 			uri = 'path/to/test';
 		});
 
-		afterEach(function() {
+		afterEach(() => {
 			url.resolve.restore();
 		});
 
-		it('should resolve a URI if origin and uri passed', function() {
+		it('should resolve a URI if origin and uri passed', () => {
 			helpers.resolveUri(origin, uri);
 			expect(resolveSpy.calledOnce).to.be.true;
 		});
 
-		it('should not resolve if URI has http in it', function() {
+		it('should not resolve if URI has http in it', () => {
 			uri = origin + uri;
 			helpers.resolveUri(origin, uri);
 			expect(resolveSpy.calledOnce).to.be.false;
 		});
 
-		it('should not resolve if no origin is passed', function() {
+		it('should not resolve if no origin is passed', () => {
 			helpers.resolveUri(null, uri);
 			expect(resolveSpy.calledOnce).to.be.false;
 		});
 
-		it('should not resolve if no URI is passed', function() {
+		it('should not resolve if no URI is passed', () => {
 			helpers.resolveUri(origin, null);
 			expect(resolveSpy.calledOnce).to.be.false;
 		});
