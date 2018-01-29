@@ -1,6 +1,7 @@
 .*
 test
-Gruntfile.js
+gulpfile.babel.js
 testing.js
 node_modules
 coverage
+gulp
