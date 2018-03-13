@@ -11,6 +11,8 @@ The Salesforce Marketing Cloud SDKs are community-supported projects. The SDK so
 * Submit ideas and suggestions to the [Trailblazer Community](https://success.salesforce.com/ideaSearch?sort=2&filter=Marketing+Cloud).
 * File issues and feature requests here on Github.
 
+## Installation
+
 ```
 npm install fuel-rest --save
 
