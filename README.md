@@ -3,7 +3,13 @@ Fuel REST Client (for Node.js) [![Build Status](https://travis-ci.org/salesforce
 
 **This repo used to be located at https://github.com/exacttarget/Fuel-Node-REST**
 
-This library allows users access to the Salesforce Marketing Cloud (formerly ExactTarget) REST API at a low level.
+This library allows users access to the Salesforce Marketing Cloud REST API at a low level.
+
+## Support
+The Salesforce Marketing Cloud SDKs are community-supported projects. The SDK source code, samples, and documentation are publicly available on Github to use as-is or fork and modify for your needs. We invite everyone in the community to collaborate with us on Github and submit pull requests to help improve the source code and samples.
+* Post questions on [StackExchange](https://salesforce.stackexchange.com/questions/tagged/marketing-cloud).
+* Submit ideas and suggestions to the [Trailblazer Community](https://success.salesforce.com/ideaSearch?sort=2&filter=Marketing+Cloud).
+* File issues and feature requests here on Github.
 
 ```
 npm install fuel-rest --save
@@ -105,7 +111,7 @@ We welcome all contributions and issues! There's only one way to make this bette
 
 ## Supported Node Versions
 
-We follow the [Node.js Release Schedule](https://github.com/nodejs/Release#release-schedule). When the current date is past the version's "Maintenance LTS End" it will no longer be supported by this library. A major release on this module will be published when this occurs. 
+We follow the [Node.js Release Schedule](https://github.com/nodejs/Release#release-schedule). When the current date is past the version's "Maintenance LTS End" it will no longer be supported by this library. A major release on this module will be published when this occurs.
 
 ## ChangeLog
 
