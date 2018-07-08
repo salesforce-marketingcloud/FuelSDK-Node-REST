@@ -4,7 +4,8 @@
   "description": "Node library for performing REST API calls to Salesforce Marketing Cloud (formerly ExactTarget).",
   "main": "./lib/fuel-rest.js",
   "scripts": {
-    "test": "node ./node_modules/.bin/gulp ci",
+    "lint": "node ./node_modules/.bin/jshint ./**/*.js",
+    "test": "npm run lint && node ./node_modules/.bin/mocha ./test/specs/*.js --spec=reporter",
     "test:watch": "node ./node_modules/.bin/mocha ./test/specs/**/*.js --reporter=spec --watch"
   },
   "engines": {
@@ -21,14 +22,10 @@
     "Nathan Boyd <nboyd@salesforce.com>"
   ],
   "devDependencies": {
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-preset-es2015": "^6.24.1",
     "body-parser": "~1.18.2",
     "chai": "~2.1.1",
-    "gulp": "^3.9.1",
-    "gulp-jshint": "^2.1.0",
-    "gulp-mocha": "^5.0.0",
-    "gulp-workflow": "^1.1.5",
     "jshint": "^2.9.5",
     "lodash": "~3.10.1",
     "mocha": "~2.2.1",
