@@ -109,7 +109,7 @@ describe('General Tests', () => {
 		it('should allow for use of promises', done => {
 			var RestClient = new FuelRest(options);
 
-			sinon.stub(RestClient, '_processRequest', (options, callback) => {
+			sinon.stub(RestClient, '_processRequest').callsFake((options, callback) => {
 				callback(null, { data: true });
 			});
 
