@@ -146,7 +146,7 @@ describe('apiRequest method', function() {
 		let RestClient;
 
 		// stubbing response from auth client with no access token
-		sinon.stub(FuelAuth.prototype, 'getAccessToken', () => {
+		sinon.stub(FuelAuth.prototype, 'getAccessToken').callsFake(() => {
 			return new Promise(resolve => {
 				resolve({
 					documentation: 'https://code.docs.exacttarget.com/rest/errors/404',
@@ -177,7 +177,7 @@ describe('apiRequest method', function() {
 		var RestClient;
 
 		// stubbing response from auth client with no access token
-		sinon.stub(FuelAuth.prototype, 'getAccessToken', () => {
+		sinon.stub(FuelAuth.prototype, 'getAccessToken').callsFake(() => {
 			return new Promise((resolve, reject) => {
 				reject(new Error('error from auth client'));
 			});
@@ -205,7 +205,7 @@ describe('apiRequest method', function() {
 
 		requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
 
-		sinon.stub(FuelAuth.prototype, 'getAccessToken', () => {
+		sinon.stub(FuelAuth.prototype, 'getAccessToken').callsFake(() => {
 			return new Promise(resolve => resolve({ accessToken: 'testing', expiresIn: 3600 }));
 		});
 
@@ -238,7 +238,7 @@ describe('apiRequest method', function() {
 
 		requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
 
-		sinon.stub(FuelAuth.prototype, 'getAccessToken', () => {
+		sinon.stub(FuelAuth.prototype, 'getAccessToken').callsFake(() => {
 			return new Promise(resolve => resolve({ accessToken: 'testing', expiresIn: 3600 }));
 		});
 
@@ -285,7 +285,7 @@ describe('apiRequest method', function() {
 			var invalidateSpy = sinon.stub(FuelAuth.prototype, 'invalidateToken');
 			var RestClient;
 
-			sinon.stub(FuelAuth.prototype, 'getAccessToken', () => {
+			sinon.stub(FuelAuth.prototype, 'getAccessToken').callsFake(() => {
 				return new Promise(resolve => resolve({ accessToken: 'testing', expiresIn: 3600 }));
 			});
 
