@@ -27,7 +27,7 @@ module.exports = port => {
 			res.setHeader('Content-Type', 'application/json');
 
 			// check for valid URL (404)
-			if (!_.contains(_.values(validUrls), req.url)) {
+			if (!_.includes(_.values(validUrls), req.url)) {
 				res.statusCode = 404;
 				res.end(JSON.stringify(sampleResponses['404']));
 				return;
