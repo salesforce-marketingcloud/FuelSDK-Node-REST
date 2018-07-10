@@ -202,11 +202,14 @@ describe('apiRequest method', function() {
 	it('should try request again if 401 stating token is invalid', done => {
 		var requestSpy;
 		var RestClient;
+		let firstAttempt = true;
 
 		requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
 
 		sinon.stub(FuelAuth.prototype, 'getAccessToken').callsFake(() => {
-			return new Promise(resolve => resolve({ accessToken: 'testing', expiresIn: 3600 }));
+			var accessToken = firstAttempt ? 'testing' : 'retry';
+			firstAttempt = false;
+			return new Promise(resolve => resolve({ accessToken, expiresIn: 3600 }));
 		});
 
 		RestClient = new FuelRest(initOptions);
@@ -222,6 +225,8 @@ describe('apiRequest method', function() {
 			() => {
 				// error should be passed, and data should be null
 				expect(requestSpy.calledTwice).to.be.true;
+				expect(requestSpy.args[0][0].headers.Authorization).to.equal('Bearer testing');
+				expect(requestSpy.args[1][0].headers.Authorization).to.equal('Bearer retry');
 
 				FuelRest.prototype.apiRequest.restore();
 				FuelAuth.prototype.getAccessToken.restore();
