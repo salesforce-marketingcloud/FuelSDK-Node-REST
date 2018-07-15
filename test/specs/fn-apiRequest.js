@@ -237,42 +237,6 @@ describe('apiRequest method', function() {
 		);
 	});
 
-	it('should skip retry when Authorization header is provided and request 401s', done => {
-		var requestSpy;
-		var RestClient;
-
-		requestSpy = sinon.spy(FuelRest.prototype, 'apiRequest');
-
-		sinon.stub(FuelAuth.prototype, 'getAccessToken').callsFake(() => {
-			return new Promise(resolve => resolve({ accessToken: 'testing', expiresIn: 3600 }));
-		});
-
-		RestClient = new FuelRest(initOptions);
-
-		requestOptions.uri = routes.invalidToken;
-		requestOptions.retry = true;
-		requestOptions.auth = {
-			force: true
-		};
-		requestOptions.headers = {
-			Authorization: 'Bearer SomeToken'
-		};
-
-		RestClient.apiRequest(
-			requestOptions,
-			function() {
-				// error should be passed, and data should be null
-				expect(requestSpy.calledTwice).to.be.false;
-
-				FuelRest.prototype.apiRequest.restore();
-				FuelAuth.prototype.getAccessToken.restore();
-				// finish async test
-				done();
-			},
-			true
-		);
-	});
-
 	it('should use a full URI if provided', done => {
 		requestOptions.uri = localhost + routes.get;
 
