@@ -1,9 +1,15 @@
 language: node_js
 node_js:
-  - "4"
-  - "5"
-  - "6"
-  - "7"
-  - "8"
-  - "stable"
+- '4'
+- '6'
+- '8'
+- stable
 sudo: false
+before_install:
+  - export PATH=$PATH:`yarn global bin`
+  - yarn global add greenkeeper-lockfile@1
+before_script: greenkeeper-lockfile-update
+after_script: greenkeeper-lockfile-upload
+env:
+  global:
+    secure: DbMT4fDiyHNk1L/6EeCX7AdFUrIIzMRTLGqAZxB4JYll2KQgLFUoMq1rBDmk/C7EGGEMxG98u80q+FkVb9eIU+VsGG5Qje00ww9oCBfta1gpDCP+dBIwWcQFoSPabY7oFg4bC4rMFW3ZoauRcB2tdma75ZHq/NgpJ7yldOXH6bU=
