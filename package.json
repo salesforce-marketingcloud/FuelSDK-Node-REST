@@ -35,6 +35,6 @@
     "fuel-auth": "^3.0.2",
     "lodash.clone": "~4.5.0",
     "lodash.isplainobject": "~4.0.4",
-    "request": "~2.87.0"
+    "request": "~2.88.0"
   }
 }
