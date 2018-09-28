@@ -4,3 +4,4 @@ node_modules/
 .*.swp
 testing.js
 coverage/
+package-lock.json
