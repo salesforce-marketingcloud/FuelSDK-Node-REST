@@ -12,6 +12,7 @@ const http = require('http');
 
 const port = 4550;
 const proxyPort = 8888;
+const proxyErrorPort = 1234;
 const localhost = `http://127.0.0.1:${port}`;
 const proxyResponseBody = 'Hello Node JS Server Response';
 const requestOptions = {
@@ -58,12 +59,13 @@ describe('Proxy support', function () {
 	});
 
 	it('should error if proxy option passed incorrectly', done => {
-		initOptions.proxy.port = 1234;
+		initOptions.proxy.port = proxyErrorPort;
 		restClient = new FuelRest(initOptions);
 		restClient.AuthClient.accessToken = accessToken;
 		restClient.AuthClient.expiration = expiration;
 		restClient.apiRequest(requestOptions, (err) => {
 			expect(err.code).to.equal('ECONNREFUSED');
+			expect(err.port).to.equal(proxyErrorPort);
 			done();
 		});
 	});
