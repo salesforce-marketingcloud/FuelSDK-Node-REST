@@ -40,15 +40,17 @@ describe('Proxy support', function () {
 				clientSecret: 'testing'
 			},
 			restEndpoint: localhost,
-			proxy: {
-				host: '127.0.0.1',
-				protocol: 'http:'
+			globalReqOptions: {
+				proxy: {
+					host: '127.0.0.1',
+					protocol: 'http:'
+				}
 			}
 		};
 	});
 
 	it('should respond the proxyResponseBody if proxy option passed correctly', done => {
-		initOptions.proxy.port = proxyPort;
+		initOptions.globalReqOptions.proxy.port = proxyPort;
 		restClient = new FuelRest(initOptions);
 		restClient.AuthClient.accessToken = accessToken;
 		restClient.AuthClient.expiration = expiration;
@@ -59,7 +61,7 @@ describe('Proxy support', function () {
 	});
 
 	it('should error if proxy option passed incorrectly', done => {
-		initOptions.proxy.port = proxyErrorPort;
+		initOptions.globalReqOptions.proxy.port = proxyErrorPort;
 		restClient = new FuelRest(initOptions);
 		restClient.AuthClient.accessToken = accessToken;
 		restClient.AuthClient.expiration = expiration;
