@@ -35,6 +35,10 @@ yarn add fuel-rest
     * Required: no
     * Type: `Object`
     * set headers that apply to all REST requests (not auth requests)
+* `options.globalReqOptions`
+    * Required: no
+    * Type: `Object`
+	* set configuration options that apply to all requests (auth + REST)
 
 ## API
 
