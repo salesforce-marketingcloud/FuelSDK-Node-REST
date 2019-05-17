@@ -93,4 +93,16 @@ describe('helpers', () => {
 			expect(resolveSpy.calledOnce).to.be.false;
 		});
 	});
+
+	describe("resolveUriForOAuth2", () => {
+		it('should resolve an URI for OAuth2', () => {
+			let result = helpers.resolveUriForOAuth2('https://www.exacttargetapis.com/hub/v1/campaigns','https://abc.rest.marketingcloudqaapis.com/');
+			expect(result).to.equal('https://abc.rest.marketingcloudqaapis.com/hub/v1/campaigns');
+		});
+
+		it('should resolve an URI for OAuth2 indifferent of casing', () => {
+			let result = helpers.resolveUriForOAuth2('https://www.exacttargetapis.COM/hub/v1/campaigns','https://abc.rest.marketingcloudqaapis.com/');
+			expect(result).to.equal('https://abc.rest.marketingcloudqaapis.com/hub/v1/campaigns');
+		});
+	});
 });
