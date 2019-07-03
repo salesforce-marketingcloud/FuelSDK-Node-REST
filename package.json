@@ -29,7 +29,7 @@
     "jshint": "^2.9.5",
     "lodash": "~4.17.10",
     "mocha": "~5.2.0",
-    "sinon": "~6.1.3"
+    "sinon": "~7.2.4"
   },
   "dependencies": {
     "fuel-auth": "^3.2.1",
